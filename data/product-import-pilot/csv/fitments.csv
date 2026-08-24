@@ -1,0 +1,8 @@
+source_fitment_id,source_product_id,source_variant_id,make,model,year_from,year_to,fitment_note,confidence
+pilot-005-f1,pilot-005,,Yamaha,Tenere 700,2019,2024,,HIGH
+pilot-005-f2,pilot-005,,Yamaha,Tenere 700,2025,,Open-ended 2025+ fitment requires ongoing verification.,MEDIUM
+pilot-006-f1,pilot-006,,Yamaha,Tenere 700,2020,2024,,HIGH
+pilot-006-f2,pilot-006,,Yamaha,Tenere 700,2025,,Open-ended 2025+ fitment requires ongoing verification.,MEDIUM
+pilot-007-f1,pilot-007,,Yamaha,Tenere 700,2023,2026,Rendered-title range; conflicts with the URL text.,LOW
+pilot-007-f2,pilot-007,,Yamaha,Tenere 700 World Raid,2023,2026,Rendered-title range; conflicts with the URL text.,LOW
+pilot-015-f1,pilot-015,,Honda,Africa Twin CRF1000L,,,Exact supported model years were not exposed by the indexed record.,LOW

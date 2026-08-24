@@ -1,0 +1,16 @@
+source_variant_id,location_code,quantity,availability_status,allow_backorder,captured_at
+pilot-001-v1,,,OUT_OF_STOCK,true,2026-07-28
+pilot-002-v1,,,MIXED_OR_UNKNOWN,,2026-07-28
+pilot-003-v1,,,IN_STOCK,true,2026-07-28
+pilot-004-v1,,,IN_STOCK,true,2026-07-28
+pilot-005-v1,,,OUT_OF_STOCK,true,2026-07-28
+pilot-006-v1,,,OUT_OF_STOCK,true,2026-07-28
+pilot-007-v1,,,IN_STOCK,,2026-07-28
+pilot-008-v1,,,UNKNOWN,,2026-07-28
+pilot-009-v1,,,UNKNOWN,,2026-07-28
+pilot-010-v1,,,IN_STOCK,,2026-07-28
+pilot-011-v1,,,SPECIAL_ORDER,true,2026-07-28
+pilot-012-v1,,,IN_STOCK,,2026-07-28
+pilot-013-v1,,,UNKNOWN,,2026-07-28
+pilot-014-v1,,,UNKNOWN,,2026-07-28
+pilot-015-v1,,,IN_STOCK,true,2026-07-28

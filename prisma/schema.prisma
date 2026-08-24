@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model MediaAsset {
+  id               Int       @id @default(autoincrement())
+  publicId         String    @unique @default(cuid()) @db.VarChar(30)
+  storageProvider  String    @db.VarChar(50)
+  storageKey       String    @unique @db.VarChar(500)
+  publicUrl        String?   @db.VarChar(2048)
+  originalFileName String    @db.VarChar(255)
+  mimeType         String    @db.VarChar(100)
+  altText          String?   @db.VarChar(500)
+  caption          String?   @db.Text
+  width            Int?      @db.UnsignedInt
+  height           Int?      @db.UnsignedInt
+  byteSize         BigInt?   @db.UnsignedBigInt
+  checksum         String?   @db.Char(64)
+  createdAt        DateTime  @default(now()) @db.DateTime(3)
+  updatedAt        DateTime  @updatedAt @db.DateTime(3)
+  archivedAt       DateTime? @db.DateTime(3)
+
+  brandLogos          Brand[]    @relation("BrandLogo")
+  brandAlternateLogos Brand[]    @relation("BrandAlternateLogo")
+  brandHeroImages     Brand[]    @relation("BrandHero")
+  categoryImages      Category[] @relation("CategoryImage")
+
+  @@index([checksum])
+  @@index([archivedAt])
+  @@map("media_assets")
+}
+
+model Brand {
+  id                   Int               @id @default(autoincrement())
+  publicId             String            @unique @default(cuid()) @db.VarChar(30)
+  name                 String            @unique @db.VarChar(191)
+  slug                 String            @unique @db.VarChar(191)
+  shortDescription     String?           @db.VarChar(500)
+  description          String?           @db.LongText
+  websiteUrl           String?           @db.VarChar(2048)
+  seoTitle             String?           @db.VarChar(255)
+  seoDescription       String?           @db.VarChar(500)
+  isFeatured           Boolean           @default(false)
+  displayOrder         Int               @default(0) @db.UnsignedInt
+  status               PublicationStatus @default(DRAFT)
+  publishedAt          DateTime?         @db.DateTime(3)
+  logoAssetId          Int?
+  alternateLogoAssetId Int?
+  heroAssetId          Int?
+  createdAt            DateTime          @default(now()) @db.DateTime(3)
+  updatedAt            DateTime          @updatedAt @db.DateTime(3)
+  archivedAt           DateTime?         @db.DateTime(3)
+
+  logoAsset          MediaAsset? @relation("BrandLogo", fields: [logoAssetId], references: [id], onDelete: SetNull)
+  alternateLogoAsset MediaAsset? @relation("BrandAlternateLogo", fields: [alternateLogoAssetId], references: [id], onDelete: SetNull)
+  heroAsset          MediaAsset? @relation("BrandHero", fields: [heroAssetId], references: [id], onDelete: SetNull)
+
+  @@index([logoAssetId])
+  @@index([alternateLogoAssetId])
+  @@index([heroAssetId])
+  @@index([status, archivedAt, displayOrder])
+  @@index([isFeatured, status, archivedAt, displayOrder])
+  @@map("brands")
+}
+
+model Category {
+  id               Int               @id @default(autoincrement())
+  publicId         String            @unique @default(cuid()) @db.VarChar(30)
+  parentId         Int?
+  name             String            @db.VarChar(191)
+  slug             String            @unique @db.VarChar(191)
+  shortDescription String?           @db.VarChar(500)
+  description      String?           @db.LongText
+  seoTitle         String?           @db.VarChar(255)
+  seoDescription   String?           @db.VarChar(500)
+  displayOrder     Int               @default(0) @db.UnsignedInt
+  status           PublicationStatus @default(DRAFT)
+  publishedAt      DateTime?         @db.DateTime(3)
+  imageAssetId     Int?
+  createdAt        DateTime          @default(now()) @db.DateTime(3)
+  updatedAt        DateTime          @updatedAt @db.DateTime(3)
+  archivedAt       DateTime?         @db.DateTime(3)
+
+  parent     Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
+  children   Category[]  @relation("CategoryHierarchy")
+  imageAsset MediaAsset? @relation("CategoryImage", fields: [imageAssetId], references: [id], onDelete: SetNull)
+
+  @@index([parentId, status, archivedAt, displayOrder])
+  @@index([imageAssetId])
+  @@map("categories")
+}
+
+model Redirect {
+  id                  Int       @id @default(autoincrement())
+  publicId            String    @unique @default(cuid()) @db.VarChar(30)
+  sourcePath          String    @unique @db.VarChar(500)
+  destinationPath     String    @db.VarChar(2048)
+  httpStatus          Int       @default(301) @db.UnsignedSmallInt
+  preserveQueryString Boolean   @default(true)
+  isActive            Boolean   @default(true)
+  note                String?   @db.Text
+  createdAt           DateTime  @default(now()) @db.DateTime(3)
+  updatedAt           DateTime  @updatedAt @db.DateTime(3)
+  archivedAt          DateTime? @db.DateTime(3)
+
+  @@index([isActive, archivedAt])
+  @@map("redirects")
+}

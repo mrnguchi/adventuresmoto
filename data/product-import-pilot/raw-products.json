@@ -1,0 +1,755 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-07-28",
+  "captureMethod": "public-search-index",
+  "directCrawlStatus": "BLOCKED_BY_CLOUDFLARE",
+  "products": [
+    {
+      "sourceProductId": "pilot-001",
+      "sourceUrl": "https://www.adventuremoto.com.au/helmetlok-ii-t-bar-combo",
+      "sourcePageType": "product",
+      "sourceConfidence": "HIGH",
+      "product": {
+        "name": "HelmetLok II & T-BAR Combo",
+        "slug": "helmetlok-ii-t-bar-combo",
+        "brandName": "HelmetLok",
+        "productType": "ACCESSORY",
+        "categorySlugs": ["accessories"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": false,
+        "isPreorder": null,
+        "notes": "Simple single-SKU, sold-out pilot record."
+      },
+      "knownOptions": [],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-001-v1",
+          "sku": "HL4104",
+          "mpn": null,
+          "supplierSku": "HL4104",
+          "barcode": null,
+          "options": {},
+          "price": {
+            "currency": "AUD",
+            "amount": "33.00",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "OUT_OF_STOCK",
+          "allowBackorder": true,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-002",
+      "sourceUrl": "https://www.adventuremoto.com.au/airoh-commander-2-doom-matte-gold-adventure-helmet",
+      "sourcePageType": "product",
+      "sourceConfidence": "MEDIUM",
+      "product": {
+        "name": "Airoh Commander 2 Doom Matte Gold Adventure Helmet",
+        "slug": "airoh-commander-2-doom-matte-gold-adventure-helmet",
+        "brandName": "Airoh",
+        "productType": "HELMET",
+        "categorySlugs": ["riding-gear", "helmets"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": null,
+        "isPreorder": null,
+        "notes": "The index exposes multiple sizes and MPNs but not a reliable selected size-to-SKU mapping."
+      },
+      "knownOptions": [
+        {
+          "name": "Size",
+          "values": ["Small", "Medium", "Large", "XLarge", "2XLarge", "3XLarge"]
+        }
+      ],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-002-v1",
+          "sku": "HACOM2084",
+          "mpn": "HACOM2084",
+          "supplierSku": "HACOM2084",
+          "barcode": null,
+          "options": {},
+          "price": null,
+          "availabilityStatus": "MIXED_OR_UNKNOWN",
+          "allowBackorder": null,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-003",
+      "sourceUrl": "https://www.adventuremoto.com.au/klim-latitude-jacket-size-2xlarge-colour-option-st",
+      "sourcePageType": "product-variant",
+      "sourceConfidence": "HIGH",
+      "product": {
+        "name": "Klim Latitude Jacket",
+        "slug": "klim-latitude-jacket",
+        "brandName": "Klim",
+        "productType": "APPAREL",
+        "categorySlugs": ["riding-gear", "mens-jackets"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": true,
+        "isPreorder": null,
+        "notes": "Variant page with size and colour options."
+      },
+      "knownOptions": [
+        {
+          "name": "Size",
+          "values": ["Small", "Medium", "Large", "XLarge", "2XLarge", "3XLarge", "4XLarge"]
+        },
+        {
+          "name": "Colour",
+          "values": [
+            "Castlerock Hi-Vis",
+            "Dress Blue-Electric Blue Lemonade",
+            "Cool Gray",
+            "Asphalt - Redrock",
+            "Stealth Black"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-003-v1",
+          "sku": "5146-004-160-001",
+          "mpn": "5146-004-160-001",
+          "supplierSku": "5146-004-160-001",
+          "barcode": null,
+          "options": {
+            "Size": "2XLarge",
+            "Colour": "Stealth Black"
+          },
+          "price": {
+            "currency": "AUD",
+            "amount": "1349.95",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "IN_STOCK",
+          "allowBackorder": true,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-004",
+      "sourceUrl": "https://www.adventuremoto.com.au/klim-badlands-pro-jacket-colour-option-peyote-pott~94740",
+      "sourcePageType": "product-variant",
+      "sourceConfidence": "HIGH",
+      "product": {
+        "name": "Klim Badlands Pro Jacket",
+        "slug": "klim-badlands-pro-jacket",
+        "brandName": "Klim",
+        "productType": "APPAREL",
+        "categorySlugs": ["riding-gear", "mens-jackets"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": null,
+        "isPreorder": null,
+        "notes": "Three-dimensional variant example: length, size and colour."
+      },
+      "knownOptions": [
+        {
+          "name": "Length",
+          "values": ["Regular", "Tall"]
+        },
+        {
+          "name": "Size",
+          "values": ["Small", "Medium", "Large", "XLarge", "2XLarge", "3XLarge"]
+        },
+        {
+          "name": "Colour",
+          "values": [
+            "Monument Gray",
+            "Peyote - Potter's Clay",
+            "Cool Gray-Electric Blue Lemonade",
+            "Petrol Strike Orange",
+            "Hi-Vis",
+            "Stealth Black"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-004-v1",
+          "sku": "4052-003-160-904",
+          "mpn": "4052-003-160-904",
+          "supplierSku": "4052-003-160-904",
+          "barcode": null,
+          "options": {
+            "Length": "Regular",
+            "Size": "2XLarge",
+            "Colour": "Peyote - Potter's Clay"
+          },
+          "price": {
+            "currency": "AUD",
+            "amount": "1999.95",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "IN_STOCK",
+          "allowBackorder": true,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-005",
+      "sourceUrl": "https://www.adventuremoto.com.au/camel-adv-yamaha-tenere-700-19-24-tenere-700-25-20",
+      "sourcePageType": "product",
+      "sourceConfidence": "HIGH",
+      "product": {
+        "name": "Camel ADV Yamaha Tenere 700 20mm Lowering Links",
+        "slug": "camel-adv-yamaha-tenere-700-20mm-lowering-links",
+        "brandName": "Camel ADV Products",
+        "productType": "MOTORCYCLE_PART",
+        "categorySlugs": ["parts"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": true,
+        "isPreorder": null,
+        "notes": "The page exposes model-year choices but not a trustworthy SKU per choice."
+      },
+      "knownOptions": [
+        {
+          "name": "Model Year",
+          "values": ["2019 - 2024", "2025+"]
+        }
+      ],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-005-v1",
+          "sku": "CA-T700-LL20",
+          "mpn": "CA-T700-LL20",
+          "supplierSku": "CA-T700-LL20",
+          "barcode": null,
+          "options": {},
+          "price": {
+            "currency": "AUD",
+            "amount": "101.95",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "OUT_OF_STOCK",
+          "allowBackorder": true,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": [
+        {
+          "sourceVariantId": null,
+          "make": "Yamaha",
+          "model": "Tenere 700",
+          "yearFrom": 2019,
+          "yearTo": 2024,
+          "note": null,
+          "confidence": "HIGH"
+        },
+        {
+          "sourceVariantId": null,
+          "make": "Yamaha",
+          "model": "Tenere 700",
+          "yearFrom": 2025,
+          "yearTo": null,
+          "note": "Open-ended 2025+ fitment requires ongoing verification.",
+          "confidence": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "sourceProductId": "pilot-006",
+      "sourceUrl": "https://www.adventuremoto.com.au/camel-adv-yamaha-tenere-700-high-mount-exhaust-kit~93322",
+      "sourcePageType": "product-variant",
+      "sourceConfidence": "MEDIUM",
+      "product": {
+        "name": "Camel ADV Yamaha Tenere 700 High Mount Exhaust Kit",
+        "slug": "camel-adv-yamaha-tenere-700-high-mount-exhaust-kit",
+        "brandName": "Camel ADV Products",
+        "productType": "MOTORCYCLE_PART",
+        "categorySlugs": ["parts"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": null,
+        "isPreorder": null,
+        "notes": "The indexed page exposes muffler and model-year options, but only one selected SKU."
+      },
+      "knownOptions": [
+        {
+          "name": "Muffler Option",
+          "values": ["No Muffler", "Scorpion Ceramic Black", "Standard", "Scorpion"]
+        },
+        {
+          "name": "Model Year",
+          "values": ["2020 - 2024", "2025+"]
+        }
+      ],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-006-v1",
+          "sku": "CA-T700-HMEK-STDM",
+          "mpn": null,
+          "supplierSku": null,
+          "barcode": null,
+          "options": {
+            "Muffler Option": "Standard"
+          },
+          "price": {
+            "currency": "AUD",
+            "amount": "1099.95",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "OUT_OF_STOCK",
+          "allowBackorder": true,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": [
+        {
+          "sourceVariantId": null,
+          "make": "Yamaha",
+          "model": "Tenere 700",
+          "yearFrom": 2020,
+          "yearTo": 2024,
+          "note": null,
+          "confidence": "HIGH"
+        },
+        {
+          "sourceVariantId": null,
+          "make": "Yamaha",
+          "model": "Tenere 700",
+          "yearFrom": 2025,
+          "yearTo": null,
+          "note": "Open-ended 2025+ fitment requires ongoing verification.",
+          "confidence": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "sourceProductId": "pilot-007",
+      "sourceUrl": "https://www.adventuremoto.com.au/p/Outback-Motortek-Yamaha-Tenere-700-World-Raid-19-2/OBM-YAM-T700-SP-BK",
+      "sourcePageType": "product",
+      "sourceConfidence": "MEDIUM",
+      "product": {
+        "name": "Outback Motortek Yamaha Tenere 700/World Raid Matte Black Skid Plate",
+        "slug": "outback-motortek-yamaha-tenere-700-world-raid-matte-black-skid-plate",
+        "brandName": "Outback Motortek",
+        "productType": "MOTORCYCLE_PART",
+        "categorySlugs": ["parts"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": false,
+        "isPreorder": null,
+        "notes": "The source URL and rendered title disagree on model years; fitment must be confirmed."
+      },
+      "knownOptions": [],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-007-v1",
+          "sku": "OBM-YAM-T700-SP-BK",
+          "mpn": "OBM-T700-SP-BL",
+          "supplierSku": null,
+          "barcode": "OBM-T700-SP-BL",
+          "options": {},
+          "price": {
+            "currency": "AUD",
+            "amount": "556.95",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "IN_STOCK",
+          "allowBackorder": null,
+          "weightGrams": 3000,
+          "lengthMm": 100,
+          "widthMm": 100,
+          "heightMm": 50
+        }
+      ],
+      "fitments": [
+        {
+          "sourceVariantId": null,
+          "make": "Yamaha",
+          "model": "Tenere 700",
+          "yearFrom": 2023,
+          "yearTo": 2026,
+          "note": "Rendered-title range; conflicts with the URL text.",
+          "confidence": "LOW"
+        },
+        {
+          "sourceVariantId": null,
+          "make": "Yamaha",
+          "model": "Tenere 700 World Raid",
+          "yearFrom": 2023,
+          "yearTo": 2026,
+          "note": "Rendered-title range; conflicts with the URL text.",
+          "confidence": "LOW"
+        }
+      ]
+    },
+    {
+      "sourceProductId": "pilot-008",
+      "sourceUrl": "https://www.adventuremoto.com.au/p/Maxxis-MA-ADV-110-80-19-Adventure-Front-Tyre/T41-19-11080",
+      "sourcePageType": "product",
+      "sourceConfidence": "MEDIUM",
+      "product": {
+        "name": "Maxxis MA-ADV 110/80-19 Adventure Front Tyre",
+        "slug": "maxxis-ma-adv-110-80-19-adventure-front-tyre",
+        "brandName": "Maxxis",
+        "productType": "TYRE",
+        "categorySlugs": ["tyres"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": null,
+        "isPreorder": null,
+        "notes": "The indexed product record exposes a URL-level SKU but not reliable price or stock."
+      },
+      "knownOptions": [],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-008-v1",
+          "sku": "T41-19-11080",
+          "mpn": null,
+          "supplierSku": null,
+          "barcode": null,
+          "options": {},
+          "price": null,
+          "availabilityStatus": "UNKNOWN",
+          "allowBackorder": null,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-009",
+      "sourceUrl": "https://www.adventuremoto.com.au/p/Continental-TKC80-170-60-17-120-70-19-TL-Adventure/240249-b",
+      "sourcePageType": "product",
+      "sourceConfidence": "MEDIUM",
+      "product": {
+        "name": "Continental TKC80 170/60-17 & 120/70-19 TL Adventure Tyre Set",
+        "slug": "continental-tkc80-170-60-17-120-70-19-tl-adventure-tyre-set",
+        "brandName": "Continental",
+        "productType": "TYRE_SET",
+        "categorySlugs": ["tyres"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": null,
+        "isPreorder": null,
+        "notes": "Price was observed in the indexed tyre listing and must be rechecked before import."
+      },
+      "knownOptions": [],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-009-v1",
+          "sku": "240249-b",
+          "mpn": null,
+          "supplierSku": null,
+          "barcode": null,
+          "options": {},
+          "price": {
+            "currency": "AUD",
+            "amount": "679.90",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "UNKNOWN",
+          "allowBackorder": null,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-010",
+      "sourceUrl": "https://www.adventuremoto.com.au/motohansa-pro-compact-38-piece-tool-kit-for-bmw-mo",
+      "sourcePageType": "product",
+      "sourceConfidence": "HIGH",
+      "product": {
+        "name": "Motohansa BMW Pro Enduro Tool Set",
+        "slug": "motohansa-bmw-pro-enduro-tool-set",
+        "brandName": "Moto-Hansa",
+        "productType": "TOOL",
+        "categorySlugs": ["tools"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": false,
+        "isPreorder": null,
+        "notes": "Simple in-stock tool with separate SKU, MPN and supplier SKU values."
+      },
+      "knownOptions": [],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-010-v1",
+          "sku": "MTT0001-38-BMW",
+          "mpn": "MTT0001-38",
+          "supplierSku": "MTT0001-38",
+          "barcode": null,
+          "options": {},
+          "price": {
+            "currency": "AUD",
+            "amount": "160.00",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "IN_STOCK",
+          "allowBackorder": null,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-011",
+      "sourceUrl": "https://www.adventuremoto.com.au/acerbis-kidney-belt-motobrand-2.0-size-small-mediu",
+      "sourcePageType": "product-variant",
+      "sourceConfidence": "HIGH",
+      "product": {
+        "name": "Acerbis Kidney Belt Motobrand 2.0",
+        "slug": "acerbis-kidney-belt-motobrand-2-0",
+        "brandName": "Acerbis",
+        "productType": "RIDING_PROTECTION",
+        "categorySlugs": ["riding-gear"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": true,
+        "isPreorder": null,
+        "notes": "Special-order option record without a reliable indexed price."
+      },
+      "knownOptions": [
+        {
+          "name": "Size",
+          "values": ["Small/Medium", "Large/XLarge"]
+        }
+      ],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-011-v1",
+          "sku": "17763.090.063",
+          "mpn": "17763.090.063",
+          "supplierSku": "17763.090.063",
+          "barcode": null,
+          "options": {
+            "Size": "Small/Medium"
+          },
+          "price": null,
+          "availabilityStatus": "SPECIAL_ORDER",
+          "allowBackorder": true,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-012",
+      "sourceUrl": "https://www.adventuremoto.com.au/alpine-stars-tech-air-offroad-airbag-system",
+      "sourcePageType": "product-variant",
+      "sourceConfidence": "HIGH",
+      "product": {
+        "name": "Alpinestars Tech-Air Offroad Airbag System",
+        "slug": "alpinestars-tech-air-offroad-airbag-system",
+        "brandName": "Alpinestars",
+        "productType": "AIRBAG_SYSTEM",
+        "categorySlugs": ["riding-gear"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": null,
+        "isPreorder": null,
+        "notes": "Safety product; shipping/dangerous-goods classification requires manual confirmation."
+      },
+      "knownOptions": [
+        {
+          "name": "Size",
+          "values": ["2XLarge"]
+        }
+      ],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-012-v1",
+          "sku": "AS65071230013",
+          "mpn": "AS65071230013",
+          "supplierSku": "AS65071230013",
+          "barcode": null,
+          "options": {
+            "Size": "2XLarge"
+          },
+          "price": {
+            "currency": "AUD",
+            "amount": "1599.99",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "IN_STOCK",
+          "allowBackorder": null,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-013",
+      "sourceUrl": "https://www.adventuremoto.com.au/luggage/?pgnum=7",
+      "sourcePageType": "category-listing",
+      "sourceConfidence": "MEDIUM",
+      "product": {
+        "name": "ADVWORX Gen-2 30L Saddlebags & 40L Duffel Bag Bundle",
+        "slug": "advworx-gen-2-30l-saddlebags-40l-duffel-bag-bundle",
+        "brandName": "ADVWORX",
+        "productType": "LUGGAGE_BUNDLE",
+        "categorySlugs": ["luggage"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": null,
+        "isPreorder": null,
+        "notes": "Listing-level record; a canonical product URL and full details are still required."
+      },
+      "knownOptions": [],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-013-v1",
+          "sku": "AWX-SBP-TPU-30-40-G2-KIT",
+          "mpn": null,
+          "supplierSku": null,
+          "barcode": null,
+          "options": {},
+          "price": {
+            "currency": "AUD",
+            "amount": "854.95",
+            "compareAtAmount": "949.90"
+          },
+          "availabilityStatus": "UNKNOWN",
+          "allowBackorder": null,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-014",
+      "sourceUrl": "https://www.adventuremoto.com.au/p/500-Adventuremoto-Gift-Certificate/ADVmoto-gift500",
+      "sourcePageType": "product",
+      "sourceConfidence": "HIGH",
+      "product": {
+        "name": "$500 Adventuremoto Gift Certificate",
+        "slug": "500-adventuremoto-gift-certificate",
+        "brandName": "Adventure Moto",
+        "productType": "GIFT_CERTIFICATE",
+        "categorySlugs": [],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": false,
+        "isSpecialOrder": false,
+        "isPreorder": false,
+        "notes": "Non-physical product used to test fulfilment and tax exceptions."
+      },
+      "knownOptions": [],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-014-v1",
+          "sku": "ADVmoto-gift500",
+          "mpn": null,
+          "supplierSku": null,
+          "barcode": null,
+          "options": {},
+          "price": {
+            "currency": "AUD",
+            "amount": "500.00",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "UNKNOWN",
+          "allowBackorder": null,
+          "weightGrams": 0,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": []
+    },
+    {
+      "sourceProductId": "pilot-015",
+      "sourceUrl": "https://www.adventuremoto.com.au/camel-adv-products-honda-africa-twin-cfr1000l-high",
+      "sourcePageType": "product",
+      "sourceConfidence": "MEDIUM",
+      "product": {
+        "name": "Camel ADV Honda Africa Twin CRF1000L High Fender Kit",
+        "slug": "camel-adv-honda-africa-twin-crf1000l-high-fender-kit",
+        "brandName": "Camel ADV Products",
+        "productType": "MOTORCYCLE_PART",
+        "categorySlugs": ["parts"],
+        "publicationStatus": "DRAFT",
+        "isDangerousGoods": null,
+        "isSpecialOrder": true,
+        "isPreorder": null,
+        "notes": "Bike-specific part with incomplete indexed model-year coverage."
+      },
+      "knownOptions": [],
+      "variants": [
+        {
+          "sourceVariantId": "pilot-015-v1",
+          "sku": "HFK-AT",
+          "mpn": "HFK-AT",
+          "supplierSku": "HFK-AT",
+          "barcode": null,
+          "options": {},
+          "price": {
+            "currency": "AUD",
+            "amount": "512.95",
+            "compareAtAmount": null
+          },
+          "availabilityStatus": "IN_STOCK",
+          "allowBackorder": true,
+          "weightGrams": null,
+          "lengthMm": null,
+          "widthMm": null,
+          "heightMm": null
+        }
+      ],
+      "fitments": [
+        {
+          "sourceVariantId": null,
+          "make": "Honda",
+          "model": "Africa Twin CRF1000L",
+          "yearFrom": null,
+          "yearTo": null,
+          "note": "Exact supported model years were not exposed by the indexed record.",
+          "confidence": "LOW"
+        }
+      ]
+    }
+  ]
+}

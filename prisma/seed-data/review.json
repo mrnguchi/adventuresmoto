@@ -1,0 +1,51 @@
+{
+  "reviewStatus": "REVIEW_REQUIRED",
+  "sourceClassification": "Provisional snapshot of the current local presentation data",
+  "authoritativeExportRequired": true,
+  "counts": {
+    "mediaAssets": 239,
+    "brands": 231,
+    "featuredBrands": 12,
+    "categories": 12,
+    "redirects": 2
+  },
+  "normalizations": [
+    {
+      "from": "ADVmoto",
+      "to": "ADVWORX",
+      "sourcePath": "/brands/advmoto",
+      "destinationPath": "/brands/advworx",
+      "reason": "The current logo and source-store brand page identify the brand as ADVWORX."
+    },
+    {
+      "from": "Doubletake Mirror",
+      "to": "Doubletake Mirrors",
+      "sourcePath": "/brands/doubletake-mirror",
+      "destinationPath": "/brands/doubletake-mirrors",
+      "reason": "The current source-store brand page uses the plural canonical name."
+    }
+  ],
+  "excludedAssets": [
+    {
+      "path": "images/brands/brand-10001.png",
+      "reason": "This is a site/Adventure Moto logo and is not referenced by the local brand directory mapping."
+    },
+    {
+      "path": "images/brands/brand-10002.png",
+      "reason": "This is a Merlin logo, but Merlin is absent from the local brand data. It requires confirmation from an authoritative export."
+    },
+    {
+      "path": "images/brands/brand-10228.svg",
+      "reason": "This is a close icon placed in the brand folder, not a catalogue logo."
+    }
+  ],
+  "warnings": [],
+  "importGates": [
+    "Reconcile brand names and legacy IDs against an authoritative store export.",
+    "Approve the initial canonical category hierarchy.",
+    "Confirm that the local brand and category artwork may be reused.",
+    "Choose the production media-storage provider; local-public paths are only the initial development source.",
+    "Resolve or deliberately accept every warning in this review file.",
+    "Change reviewStatus to APPROVED only after the preceding checks are complete."
+  ]
+}

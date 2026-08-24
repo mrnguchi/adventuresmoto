@@ -1,0 +1,44 @@
+{
+  "name": "adventuresmoto",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:up": "docker compose up --detach --wait",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs --follow database",
+    "db:validate": "prisma validate",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
+    "db:studio": "prisma studio",
+    "seed:prepare": "node --experimental-strip-types scripts/prepare-catalogue-seed.mjs",
+    "seed:validate": "node scripts/validate-catalogue-seed.mjs",
+    "pilot:generate": "node scripts/generate-product-import-pilot.mjs",
+    "pilot:validate": "node scripts/validate-product-import-pilot.mjs"
+  },
+  "dependencies": {
+    "@next/env": "^16.2.12",
+    "@prisma/adapter-mariadb": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "next": "16.2.12",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.12",
+    "prisma": "^7.9.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

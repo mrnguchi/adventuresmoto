@@ -1,0 +1,16 @@
+source_variant_id,source_product_id,sku,mpn,supplier_sku,barcode,option_1_name,option_1_value,option_2_name,option_2_value,option_3_name,option_3_value,weight_grams,length_mm,width_mm,height_mm,availability_status
+pilot-001-v1,pilot-001,HL4104,,HL4104,,,,,,,,,,,,OUT_OF_STOCK
+pilot-002-v1,pilot-002,HACOM2084,HACOM2084,HACOM2084,,,,,,,,,,,,MIXED_OR_UNKNOWN
+pilot-003-v1,pilot-003,5146-004-160-001,5146-004-160-001,5146-004-160-001,,Size,2XLarge,Colour,Stealth Black,,,,,,,IN_STOCK
+pilot-004-v1,pilot-004,4052-003-160-904,4052-003-160-904,4052-003-160-904,,Length,Regular,Size,2XLarge,Colour,Peyote - Potter's Clay,,,,,IN_STOCK
+pilot-005-v1,pilot-005,CA-T700-LL20,CA-T700-LL20,CA-T700-LL20,,,,,,,,,,,,OUT_OF_STOCK
+pilot-006-v1,pilot-006,CA-T700-HMEK-STDM,,,,Muffler Option,Standard,,,,,,,,,OUT_OF_STOCK
+pilot-007-v1,pilot-007,OBM-YAM-T700-SP-BK,OBM-T700-SP-BL,,OBM-T700-SP-BL,,,,,,,3000,100,100,50,IN_STOCK
+pilot-008-v1,pilot-008,T41-19-11080,,,,,,,,,,,,,,UNKNOWN
+pilot-009-v1,pilot-009,240249-b,,,,,,,,,,,,,,UNKNOWN
+pilot-010-v1,pilot-010,MTT0001-38-BMW,MTT0001-38,MTT0001-38,,,,,,,,,,,,IN_STOCK
+pilot-011-v1,pilot-011,17763.090.063,17763.090.063,17763.090.063,,Size,Small/Medium,,,,,,,,,SPECIAL_ORDER
+pilot-012-v1,pilot-012,AS65071230013,AS65071230013,AS65071230013,,Size,2XLarge,,,,,,,,,IN_STOCK
+pilot-013-v1,pilot-013,AWX-SBP-TPU-30-40-G2-KIT,,,,,,,,,,,,,,UNKNOWN
+pilot-014-v1,pilot-014,ADVmoto-gift500,,,,,,,,,,0,,,,UNKNOWN
+pilot-015-v1,pilot-015,HFK-AT,HFK-AT,HFK-AT,,,,,,,,,,,,IN_STOCK

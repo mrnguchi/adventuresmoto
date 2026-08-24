@@ -1,0 +1,20 @@
+[
+  {
+    "sourcePath": "/brands/advmoto",
+    "destinationPath": "/brands/advworx",
+    "httpStatus": 301,
+    "preserveQueryString": true,
+    "isActive": true,
+    "note": "Corrects the former featured-brand label and link.",
+    "archivedAt": null
+  },
+  {
+    "sourcePath": "/brands/doubletake-mirror",
+    "destinationPath": "/brands/doubletake-mirrors",
+    "httpStatus": 301,
+    "preserveQueryString": true,
+    "isActive": true,
+    "note": "Preserves the former singular featured-brand link.",
+    "archivedAt": null
+  }
+]

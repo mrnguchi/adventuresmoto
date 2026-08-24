@@ -1,0 +1,29 @@
+{
+  "reviewStatus": "PILOT_ONLY",
+  "directCrawlStatus": "BLOCKED_BY_CLOUDFLARE",
+  "captureMethod": "public-search-index",
+  "capturedAt": "2026-07-28",
+  "counts": {
+    "products.csv": 15,
+    "variants.csv": 15,
+    "prices.csv": 12,
+    "product-categories.csv": 17,
+    "fitments.csv": 7,
+    "inventory.csv": 15,
+    "media.csv": 0
+  },
+  "coverage": {
+    "productsWithObservedPrice": 12,
+    "productsWithFitment": 4,
+    "variantsWithKnownQuantity": 0,
+    "mediaRows": 0
+  },
+  "limitations": [
+    "Cloudflare blocked direct sitemap and product-page crawling.",
+    "The pilot uses public search-index records rather than live HTML.",
+    "Only observed SKUs are included; missing variant combinations were not invented.",
+    "Prices and availability are historical snapshots and require revalidation.",
+    "Inventory quantities and locations are unknown.",
+    "Descriptions and media are intentionally empty."
+  ]
+}

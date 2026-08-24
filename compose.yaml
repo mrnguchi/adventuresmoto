@@ -1,0 +1,29 @@
+name: adventuresmoto
+
+services:
+  database:
+    image: mariadb:11.4.12
+    container_name: adventuresmoto-database
+    env_file:
+      - .env.local
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - database-data:/var/lib/mysql
+      - ./docker/mariadb/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test:
+        - CMD
+        - healthcheck.sh
+        - --connect
+        - --innodb_initialized
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+volumes:
+  database-data:
