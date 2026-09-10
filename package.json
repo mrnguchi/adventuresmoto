@@ -13,6 +13,7 @@
     "db:logs": "docker compose logs --follow database",
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",
+    "db:export:schema": "node scripts/export-database-schema.mjs",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:status": "prisma migrate status",

@@ -1,5 +1,8 @@
 # Database foundation data dictionary
 
+This document describes the original foundation. See [Database schema](database-schema.md)
+for the expanded catalogue, variants, inventory, ordering and admin design.
+
 This document defines the first small database slice for Adventures Moto. It is
 based on the catalogue, media and migration requirements identified in the
 discovery audit.

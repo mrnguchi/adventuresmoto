@@ -3,6 +3,12 @@
 Adventures Moto is a Next.js e-commerce application for adventure motorcycle
 equipment, parts, luggage, accessories, tyres and tools.
 
+The expanded catalogue and commerce schema is documented in
+[Database schema](docs/database-schema.md), including the screenshot-to-table
+mapping, relationships, inventory rules and Hostinger import instructions.
+`npm run db:export:schema` generates `prisma/exports/schema.sql` for an empty
+database. Existing databases should use migrations rather than that bootstrap file.
+
 ## Requirements
 
 - Node.js 24

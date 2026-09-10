@@ -13,22 +13,23 @@ enum PublicationStatus {
 }
 
 model MediaAsset {
-  id               Int       @id @default(autoincrement())
-  publicId         String    @unique @default(cuid()) @db.VarChar(30)
-  storageProvider  String    @db.VarChar(50)
-  storageKey       String    @unique @db.VarChar(500)
-  publicUrl        String?   @db.VarChar(2048)
-  originalFileName String    @db.VarChar(255)
-  mimeType         String    @db.VarChar(100)
-  altText          String?   @db.VarChar(500)
-  caption          String?   @db.Text
-  width            Int?      @db.UnsignedInt
-  height           Int?      @db.UnsignedInt
-  byteSize         BigInt?   @db.UnsignedBigInt
-  checksum         String?   @db.Char(64)
-  createdAt        DateTime  @default(now()) @db.DateTime(3)
-  updatedAt        DateTime  @updatedAt @db.DateTime(3)
-  archivedAt       DateTime? @db.DateTime(3)
+  productMedia     ProductMedia[]
+  id               Int            @id @default(autoincrement())
+  publicId         String         @unique @default(cuid()) @db.VarChar(30)
+  storageProvider  String         @db.VarChar(50)
+  storageKey       String         @unique @db.VarChar(500)
+  publicUrl        String?        @db.VarChar(2048)
+  originalFileName String         @db.VarChar(255)
+  mimeType         String         @db.VarChar(100)
+  altText          String?        @db.VarChar(500)
+  caption          String?        @db.Text
+  width            Int?           @db.UnsignedInt
+  height           Int?           @db.UnsignedInt
+  byteSize         BigInt?        @db.UnsignedBigInt
+  checksum         String?        @db.Char(64)
+  createdAt        DateTime       @default(now()) @db.DateTime(3)
+  updatedAt        DateTime       @updatedAt @db.DateTime(3)
+  archivedAt       DateTime?      @db.DateTime(3)
 
   brandLogos          Brand[]    @relation("BrandLogo")
   brandAlternateLogos Brand[]    @relation("BrandAlternateLogo")
@@ -41,6 +42,7 @@ model MediaAsset {
 }
 
 model Brand {
+  products             Product[]
   id                   Int               @id @default(autoincrement())
   publicId             String            @unique @default(cuid()) @db.VarChar(30)
   name                 String            @unique @db.VarChar(191)
@@ -74,6 +76,9 @@ model Brand {
 }
 
 model Category {
+  primaryProducts  Product[]         @relation("PrimaryCategory")
+  filters          CategoryFilter[]
+  products         ProductCategory[]
   id               Int               @id @default(autoincrement())
   publicId         String            @unique @default(cuid()) @db.VarChar(30)
   parentId         Int?
@@ -115,4 +120,730 @@ model Redirect {
 
   @@index([isActive, archivedAt])
   @@map("redirects")
+}
+
+enum ProductKind {
+  PHYSICAL
+  BUNDLE
+}
+
+enum FilterKind {
+  BRAND
+  AVAILABILITY
+  PRICE
+  OPTION
+  ATTRIBUTE
+}
+
+enum RelationKind {
+  COLOUR_ALTERNATIVE
+  ESSENTIAL
+  ACCESSORY
+  SIMILAR
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  PAID
+  FAILED
+  CANCELLED
+}
+
+enum ReservationStatus {
+  ACTIVE
+  CONSUMED
+  RELEASED
+  EXPIRED
+}
+
+enum RefundStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+
+// Reusable definitions support category-specific facets and product options.
+model AttributeDefinition {
+  id              Int              @id @default(autoincrement())
+  code            String           @unique @db.VarChar(100)
+  name            String           @db.VarChar(100)
+  unit            String?          @db.VarChar(30)
+  values          AttributeValue[]
+  categoryFilters CategoryFilter[]
+  productOptions  ProductOption[]
+
+  @@map("attribute_definitions")
+}
+
+model AttributeValue {
+  id                Int                 @id @default(autoincrement())
+  attributeId       Int
+  code              String              @db.VarChar(100)
+  label             String              @db.VarChar(191)
+  numericValue      Decimal?            @db.Decimal(12, 4)
+  displayOrder      Int                 @default(0) @db.UnsignedInt
+  attribute         AttributeDefinition @relation(fields: [attributeId], references: [id], onDelete: Restrict)
+  productAttributes ProductAttribute[]
+
+  @@unique([attributeId, code])
+  @@map("attribute_values")
+}
+
+model CategoryFilter {
+  id           Int                  @id @default(autoincrement())
+  categoryId   Int
+  code         String               @db.VarChar(100)
+  label        String               @db.VarChar(100)
+  kind         FilterKind
+  attributeId  Int?
+  displayOrder Int                  @default(0) @db.UnsignedInt
+  isEnabled    Boolean              @default(true)
+  category     Category             @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  attribute    AttributeDefinition? @relation(fields: [attributeId], references: [id], onDelete: Restrict)
+
+  @@unique([categoryId, code])
+  @@map("category_filters")
+}
+
+model ProductAttribute {
+  productId Int
+  valueId   Int
+  product   Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  value     AttributeValue @relation(fields: [valueId], references: [id], onDelete: Restrict)
+
+  @@id([productId, valueId])
+  @@index([valueId])
+  @@map("product_attributes")
+}
+
+model ProductOption {
+  id           Int                  @id @default(autoincrement())
+  productId    Int
+  attributeId  Int
+  label        String               @db.VarChar(100)
+  displayOrder Int                  @default(0) @db.UnsignedInt
+  product      Product              @relation(fields: [productId], references: [id], onDelete: Cascade)
+  attribute    AttributeDefinition  @relation(fields: [attributeId], references: [id], onDelete: Restrict)
+  values       ProductOptionValue[]
+
+  @@unique([productId, attributeId])
+  @@unique([id, productId])
+  @@map("product_options")
+}
+
+model ProductOptionValue {
+  id           Int             @id @default(autoincrement())
+  optionId     Int
+  productId    Int
+  code         String          @db.VarChar(100)
+  label        String          @db.VarChar(100)
+  swatchHex    String?         @db.Char(7)
+  displayOrder Int             @default(0) @db.UnsignedInt
+  option       ProductOption   @relation(fields: [optionId, productId], references: [id, productId], onDelete: Cascade)
+  selections   VariantOption[]
+
+  @@unique([optionId, code])
+  @@unique([id, optionId, productId])
+  @@map("product_option_values")
+}
+
+// Composite keys prevent a SKU selecting values belonging to another product.
+model VariantOption {
+  variantId Int
+  productId Int
+  optionId  Int
+  valueId   Int
+  variant   ProductVariant     @relation(fields: [variantId, productId], references: [id, productId], onDelete: Cascade)
+  value     ProductOptionValue @relation(fields: [valueId, optionId, productId], references: [id, optionId, productId], onDelete: Restrict)
+
+  @@id([variantId, optionId])
+  @@map("variant_options")
+}
+
+model ProductMedia {
+  variantId    Int?
+  variant      ProductVariant? @relation(fields: [variantId, productId], references: [id, productId], onDelete: Restrict)
+  id           Int             @id @default(autoincrement())
+  productId    Int
+  assetId      Int
+  displayOrder Int             @default(0) @db.UnsignedInt
+  altText      String?         @db.VarChar(500)
+  product      Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  asset        MediaAsset      @relation(fields: [assetId], references: [id], onDelete: Restrict)
+
+  @@unique([productId, assetId])
+  @@index([productId, displayOrder])
+  @@map("product_media")
+}
+
+// JSON is only editorial content, not prices, inventory or searchable facets.
+model ProductSection {
+  id           Int     @id @default(autoincrement())
+  productId    Int
+  code         String  @db.VarChar(100)
+  title        String  @db.VarChar(191)
+  body         String? @db.LongText
+  bullets      Json?
+  videoUrl     String? @db.VarChar(2048)
+  displayOrder Int     @default(0) @db.UnsignedInt
+  product      Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, code])
+  @@index([productId, displayOrder])
+  @@map("product_sections")
+}
+
+model SizeChart {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(191)
+  unit         String    @default("cm") @db.VarChar(20)
+  instructions String?   @db.Text
+  // Validated { headings: string[], rows: string[][] } presentation document.
+  measurements Json
+  version      Int       @default(1) @db.UnsignedInt
+  createdAt    DateTime  @default(now()) @db.DateTime(3)
+  updatedAt    DateTime  @updatedAt @db.DateTime(3)
+  products     Product[]
+
+  @@map("size_charts")
+}
+
+model StorePolicy {
+  id           Int       @id @default(autoincrement())
+  code         String    @unique @db.VarChar(100)
+  name         String    @db.VarChar(191)
+  shippingText String    @db.Text
+  returnsText  String    @db.Text
+  warrantyText String?   @db.Text
+  returnDays   Int?      @db.UnsignedSmallInt
+  version      Int       @default(1) @db.UnsignedInt
+  createdAt    DateTime  @default(now()) @db.DateTime(3)
+  updatedAt    DateTime  @updatedAt @db.DateTime(3)
+  products     Product[]
+
+  @@map("store_policies")
+}
+
+model ProductRelation {
+  sourceId     Int
+  targetId     Int
+  kind         RelationKind
+  displayOrder Int          @default(0) @db.UnsignedInt
+  source       Product      @relation("RelatedFrom", fields: [sourceId], references: [id], onDelete: Cascade)
+  target       Product      @relation("RelatedTo", fields: [targetId], references: [id], onDelete: Restrict)
+
+  @@id([sourceId, targetId, kind])
+  @@index([targetId])
+  @@map("product_relations")
+}
+
+model MotorcycleMake {
+  id     Int               @id @default(autoincrement())
+  name   String            @unique @db.VarChar(100)
+  models MotorcycleModel[]
+
+  @@map("motorcycle_makes")
+}
+
+model MotorcycleModel {
+  id     Int              @id @default(autoincrement())
+  makeId Int
+  name   String           @db.VarChar(191)
+  make   MotorcycleMake   @relation(fields: [makeId], references: [id], onDelete: Restrict)
+  years  MotorcycleYear[]
+
+  @@unique([makeId, name])
+  @@map("motorcycle_models")
+}
+
+model MotorcycleYear {
+  id       Int                  @id @default(autoincrement())
+  modelId  Int
+  year     Int                  @db.UnsignedSmallInt
+  model    MotorcycleModel      @relation(fields: [modelId], references: [id], onDelete: Restrict)
+  fitments ProductFitment[]
+  garage   CustomerMotorcycle[]
+
+  @@unique([modelId, year])
+  @@map("motorcycle_years")
+}
+
+model ProductFitment {
+  productId        Int
+  motorcycleYearId Int
+  note             String?        @db.VarChar(500)
+  product          Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  motorcycle       MotorcycleYear @relation(fields: [motorcycleYearId], references: [id], onDelete: Restrict)
+
+  @@id([productId, motorcycleYearId])
+  @@index([motorcycleYearId])
+  @@map("product_fitments")
+}
+
+model StockLocation {
+  id             Int                @id @default(autoincrement())
+  code           String             @unique @db.VarChar(50)
+  name           String             @db.VarChar(191)
+  address        Json?
+  timezone       String             @default("Australia/Sydney") @db.VarChar(100)
+  fulfillsOnline Boolean            @default(false)
+  offersPickup   Boolean            @default(false)
+  isActive       Boolean            @default(true)
+  inventory      InventoryBalance[]
+
+  @@map("stock_locations")
+}
+
+model InventoryBalance {
+  id           Int                 @id @default(autoincrement())
+  variantId    Int
+  locationId   Int
+  onHand       Int                 @default(0) @db.UnsignedInt
+  reserved     Int                 @default(0) @db.UnsignedInt
+  safetyStock  Int                 @default(0) @db.UnsignedInt
+  version      Int                 @default(0) @db.UnsignedInt
+  updatedAt    DateTime            @updatedAt @db.DateTime(3)
+  variant      ProductVariant      @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  location     StockLocation       @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  movements    InventoryMovement[]
+  reservations StockReservation[]
+
+  @@unique([variantId, locationId])
+  @@index([locationId])
+  @@map("inventory_balances")
+}
+
+model InventoryMovement {
+  id          Int              @id @default(autoincrement())
+  inventoryId Int
+  delta       Int
+  reason      String           @db.VarChar(100)
+  reference   String           @unique @db.VarChar(191)
+  actorId     Int?
+  createdAt   DateTime         @default(now()) @db.DateTime(3)
+  inventory   InventoryBalance @relation(fields: [inventoryId], references: [id], onDelete: Restrict)
+  actor       User?            @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([inventoryId, createdAt])
+  @@map("inventory_movements")
+}
+
+model StockReservation {
+  id          Int               @id @default(autoincrement())
+  inventoryId Int
+  orderItemId Int
+  quantity    Int               @db.UnsignedInt
+  status      ReservationStatus @default(ACTIVE)
+  expiresAt   DateTime          @db.DateTime(3)
+  createdAt   DateTime          @default(now()) @db.DateTime(3)
+  updatedAt   DateTime          @updatedAt @db.DateTime(3)
+  inventory   InventoryBalance  @relation(fields: [inventoryId], references: [id], onDelete: Restrict)
+  orderItem   OrderItem         @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+
+  @@unique([inventoryId, orderItemId])
+  @@index([status, expiresAt])
+  @@map("stock_reservations")
+}
+
+model Product {
+  primaryCategoryId Int?
+  primaryCategory   Category?          @relation("PrimaryCategory", fields: [primaryCategoryId], references: [id], onDelete: Restrict)
+  feedback          ProductFeedback[]
+  kind              ProductKind        @default(PHYSICAL)
+  isWearable        Boolean            @default(false)
+  shortDescription  String?            @db.VarChar(500)
+  description       String?            @db.LongText
+  seoTitle          String?            @db.VarChar(255)
+  seoDescription    String?            @db.VarChar(500)
+  publishedAt       DateTime?          @db.DateTime(3)
+  currency          String             @default("AUD") @db.Char(3)
+  taxClass          String             @default("STANDARD") @db.VarChar(50)
+  sizeChartId       Int?
+  policyId          Int?
+  version           Int                @default(0) @db.UnsignedInt
+  sizeChart         SizeChart?         @relation(fields: [sizeChartId], references: [id], onDelete: SetNull)
+  policy            StorePolicy?       @relation(fields: [policyId], references: [id], onDelete: SetNull)
+  media             ProductMedia[]
+  sections          ProductSection[]
+  options           ProductOption[]
+  attributes        ProductAttribute[]
+  outgoingRelations ProductRelation[]  @relation("RelatedFrom")
+  incomingRelations ProductRelation[]  @relation("RelatedTo")
+  fitments          ProductFitment[]
+  reviews           Review[]
+  wishlistItems     WishlistItem[]
+  id                Int                @id @default(autoincrement())
+  slug              String             @unique @db.VarChar(191)
+  name              String             @db.VarChar(255)
+  brandId           Int?
+  imageUrl          String?            @db.VarChar(2048)
+  price             Decimal            @db.Decimal(10, 2)
+  compareAtPrice    Decimal?           @db.Decimal(10, 2)
+  status            PublicationStatus  @default(DRAFT)
+  displayOrder      Int                @default(0) @db.UnsignedInt
+  createdAt         DateTime           @default(now()) @db.DateTime(3)
+  updatedAt         DateTime           @updatedAt @db.DateTime(3)
+  archivedAt        DateTime?          @db.DateTime(3)
+  brand             Brand?             @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  categories        ProductCategory[]
+  variants          ProductVariant[]
+
+  @@index([status, archivedAt, displayOrder])
+  @@map("products")
+}
+
+model ProductCategory {
+  displayOrder Int      @default(0) @db.UnsignedInt
+  productId    Int
+  categoryId   Int
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([productId, categoryId])
+  @@index([categoryId])
+  @@map("product_categories")
+}
+
+model ProductVariant {
+  media                  ProductMedia[]
+  bundleComponents       BundleComponent[]  @relation("BundleParent")
+  usedInBundles          BundleComponent[]  @relation("BundleChild")
+  // Legacy size and inStock remain readable until the storefront adapter switches.
+  name                   String?            @db.VarChar(255)
+  barcode                String?            @unique @db.VarChar(100)
+  manufacturerPartNumber String?            @db.VarChar(191)
+  optionSignature        String?            @db.VarChar(191)
+  price                  Decimal?           @db.Decimal(10, 2)
+  compareAtPrice         Decimal?           @db.Decimal(10, 2)
+  weightGrams            Int?               @db.UnsignedInt
+  lengthMm               Int?               @db.UnsignedInt
+  widthMm                Int?               @db.UnsignedInt
+  heightMm               Int?               @db.UnsignedInt
+  isActive               Boolean            @default(true)
+  displayOrder           Int                @default(0) @db.UnsignedInt
+  createdAt              DateTime           @default(now()) @db.DateTime(3)
+  updatedAt              DateTime           @default(now()) @updatedAt @db.DateTime(3)
+  archivedAt             DateTime?          @db.DateTime(3)
+  selections             VariantOption[]
+  inventory              InventoryBalance[]
+  orderItems             OrderItem[]
+  cartItems              CartItem[]
+  id                     Int                @id @default(autoincrement())
+  productId              Int
+  sku                    String             @unique @db.VarChar(191)
+  size                   String?            @db.VarChar(50)
+  inStock                Boolean            @default(false)
+  product                Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, optionSignature])
+  @@unique([id, productId])
+  @@index([productId, inStock])
+  @@map("product_variants")
+}
+
+model BundleComponent {
+  bundleVariantId    Int
+  componentVariantId Int
+  quantity           Int            @default(1) @db.UnsignedInt
+  bundle             ProductVariant @relation("BundleParent", fields: [bundleVariantId], references: [id], onDelete: Cascade)
+  component          ProductVariant @relation("BundleChild", fields: [componentVariantId], references: [id], onDelete: Restrict)
+
+  @@id([bundleVariantId, componentVariantId])
+  @@index([componentVariantId])
+  @@map("bundle_components")
+}
+
+model User {
+  id                 Int                  @id @default(autoincrement())
+  publicId           String               @unique @default(cuid()) @db.VarChar(30)
+  email              String               @unique @db.VarChar(191)
+  passwordHash       String?              @db.VarChar(255)
+  emailVerifiedAt    DateTime?            @db.DateTime(3)
+  firstName          String               @db.VarChar(100)
+  lastName           String               @db.VarChar(100)
+  phone              String?              @db.VarChar(50)
+  disabledAt         DateTime?            @db.DateTime(3)
+  createdAt          DateTime             @default(now()) @db.DateTime(3)
+  updatedAt          DateTime             @updatedAt @db.DateTime(3)
+  roles              UserRole[]
+  orders             Order[]
+  carts              Cart[]
+  reviews            Review[]
+  wishlist           WishlistItem[]
+  garage             CustomerMotorcycle[]
+  auditEvents        AuditEvent[]
+  inventoryMovements InventoryMovement[]
+
+  @@map("users")
+}
+
+model Role {
+  id          Int              @id @default(autoincrement())
+  code        String           @unique @db.VarChar(50)
+  name        String           @db.VarChar(100)
+  users       UserRole[]
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id    Int              @id @default(autoincrement())
+  code  String           @unique @db.VarChar(100)
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Restrict)
+
+  @@id([userId, roleId])
+  @@index([roleId])
+  @@map("user_roles")
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Restrict)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+model AuditEvent {
+  id         Int      @id @default(autoincrement())
+  actorId    Int?
+  action     String   @db.VarChar(100)
+  entityType String   @db.VarChar(100)
+  entityId   String   @db.VarChar(100)
+  changes    Json?
+  createdAt  DateTime @default(now()) @db.DateTime(3)
+  actor      User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId, createdAt])
+  @@index([actorId, createdAt])
+  @@map("audit_events")
+}
+
+model CustomerMotorcycle {
+  userId           Int
+  motorcycleYearId Int
+  nickname         String?        @db.VarChar(100)
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  motorcycle       MotorcycleYear @relation(fields: [motorcycleYearId], references: [id], onDelete: Restrict)
+
+  @@id([userId, motorcycleYearId])
+  @@index([motorcycleYearId])
+  @@map("customer_motorcycles")
+}
+
+model WishlistItem {
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([userId, productId])
+  @@index([productId])
+  @@map("wishlist_items")
+}
+
+model Review {
+  id             Int          @id @default(autoincrement())
+  productId      Int
+  userId         Int
+  rating         Int          @db.UnsignedTinyInt
+  title          String       @db.VarChar(191)
+  body           String       @db.Text
+  status         ReviewStatus @default(PENDING)
+  moderatedAt    DateTime?    @db.DateTime(3)
+  moderationNote String?      @db.Text
+  createdAt      DateTime     @default(now()) @db.DateTime(3)
+  updatedAt      DateTime     @updatedAt @db.DateTime(3)
+  product        Product      @relation(fields: [productId], references: [id], onDelete: Restrict)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@unique([productId, userId])
+  @@index([productId, status, createdAt])
+  @@map("reviews")
+}
+
+model Cart {
+  id             Int        @id @default(autoincrement())
+  publicId       String     @unique @default(cuid()) @db.VarChar(30)
+  userId         Int?
+  // Store only a hash of the guest cart secret, never the cookie itself.
+  guestTokenHash String?    @unique @db.Char(64)
+  expiresAt      DateTime   @db.DateTime(3)
+  createdAt      DateTime   @default(now()) @db.DateTime(3)
+  updatedAt      DateTime   @updatedAt @db.DateTime(3)
+  user           User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items          CartItem[]
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("carts")
+}
+
+model CartItem {
+  cartId    Int
+  variantId Int
+  quantity  Int            @db.UnsignedInt
+  cart      Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Restrict)
+
+  @@id([cartId, variantId])
+  @@index([variantId])
+  @@map("cart_items")
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  publicId        String      @unique @default(cuid()) @db.VarChar(30)
+  number          String      @unique @db.VarChar(50)
+  checkoutKey     String      @unique @db.VarChar(191)
+  userId          Int?
+  email           String      @db.VarChar(191)
+  status          OrderStatus @default(PENDING)
+  currency        String      @default("AUD") @db.Char(3)
+  // Immutable checkout snapshots, independent of future customer/profile edits.
+  shippingAddress Json
+  billingAddress  Json
+  shippingMethod  String      @db.VarChar(191)
+  policySnapshot  Json?
+  subtotal        Decimal     @db.Decimal(12, 2)
+  discountTotal   Decimal     @default(0) @db.Decimal(12, 2)
+  shippingTotal   Decimal     @default(0) @db.Decimal(12, 2)
+  taxTotal        Decimal     @default(0) @db.Decimal(12, 2)
+  grandTotal      Decimal     @db.Decimal(12, 2)
+  placedAt        DateTime    @default(now()) @db.DateTime(3)
+  updatedAt       DateTime    @updatedAt @db.DateTime(3)
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items           OrderItem[]
+  payments        Payment[]
+  shipments       Shipment[]
+
+  @@index([userId, placedAt])
+  @@index([status, placedAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id              Int                @id @default(autoincrement())
+  orderId         Int
+  variantId       Int
+  productName     String             @db.VarChar(255)
+  sku             String             @db.VarChar(191)
+  optionsSnapshot Json?
+  quantity        Int                @db.UnsignedInt
+  unitPrice       Decimal            @db.Decimal(10, 2)
+  discountTotal   Decimal            @default(0) @db.Decimal(12, 2)
+  taxTotal        Decimal            @default(0) @db.Decimal(12, 2)
+  lineTotal       Decimal            @db.Decimal(12, 2)
+  order           Order              @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  variant         ProductVariant     @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  reservations    StockReservation[]
+  shipmentItems   ShipmentItem[]
+
+  @@unique([id, orderId])
+  @@index([variantId])
+  @@map("order_items")
+}
+
+model Payment {
+  id                Int           @id @default(autoincrement())
+  orderId           Int
+  provider          String        @db.VarChar(50)
+  providerReference String?       @db.VarChar(191)
+  idempotencyKey    String        @unique @db.VarChar(191)
+  status            PaymentStatus @default(PENDING)
+  amount            Decimal       @db.Decimal(12, 2)
+  currency          String        @db.Char(3)
+  createdAt         DateTime      @default(now()) @db.DateTime(3)
+  updatedAt         DateTime      @updatedAt @db.DateTime(3)
+  order             Order         @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  refunds           Refund[]
+
+  @@unique([provider, providerReference])
+  @@index([orderId, status])
+  @@map("payments")
+}
+
+model Refund {
+  id                Int          @id @default(autoincrement())
+  paymentId         Int
+  idempotencyKey    String       @unique @db.VarChar(191)
+  providerReference String?      @db.VarChar(191)
+  amount            Decimal      @db.Decimal(12, 2)
+  reason            String       @db.VarChar(500)
+  status            RefundStatus @default(PENDING)
+  createdAt         DateTime     @default(now()) @db.DateTime(3)
+  updatedAt         DateTime     @updatedAt @db.DateTime(3)
+  payment           Payment      @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+
+  @@unique([paymentId, providerReference])
+  @@map("refunds")
+}
+
+model Shipment {
+  id             Int            @id @default(autoincrement())
+  orderId        Int
+  carrier        String         @db.VarChar(100)
+  trackingNumber String?        @db.VarChar(191)
+  shippedAt      DateTime?      @db.DateTime(3)
+  deliveredAt    DateTime?      @db.DateTime(3)
+  order          Order          @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  items          ShipmentItem[]
+
+  @@unique([id, orderId])
+  @@index([orderId])
+  @@map("shipments")
+}
+
+model ShipmentItem {
+  shipmentId  Int
+  orderItemId Int
+  orderId     Int
+  quantity    Int       @db.UnsignedInt
+  shipment    Shipment  @relation(fields: [shipmentId, orderId], references: [id, orderId], onDelete: Restrict)
+  orderItem   OrderItem @relation(fields: [orderItemId, orderId], references: [id, orderId], onDelete: Restrict)
+
+  @@id([shipmentId, orderItemId])
+  @@map("shipment_items")
+}
+
+model ProductFeedback {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  visitorHash String   @db.Char(64)
+  helpful     Boolean
+  createdAt   DateTime @default(now()) @db.DateTime(3)
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, visitorHash])
+  @@map("product_feedback")
 }
