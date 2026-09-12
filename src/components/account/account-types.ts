@@ -3,7 +3,6 @@ export type AccountModalView = "login" | "signup" | "password-recovery";
 export type ProtectedAccountArea =
   | "account"
   | "garage"
-  | "wishlist"
   | "cart";
 
 export const protectedAreaCopy: Record<
@@ -18,10 +17,6 @@ export const protectedAreaCopy: Record<
     title: "Save your bike to My Garage",
     description:
       "Sign in to save your motorcycle and find parts that fit every time.",
-  },
-  wishlist: {
-    title: "Keep your favourites close",
-    description: "Sign in to save products to your wishlist across devices.",
   },
   cart: {
     title: "Your cart is waiting",

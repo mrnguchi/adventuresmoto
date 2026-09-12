@@ -3,7 +3,6 @@
 import type { FormEvent } from "react";
 
 import { PasswordField } from "@/components/account/password-field";
-import { SocialSignIn } from "@/components/account/social-sign-in";
 
 type LoginFormProps = {
   onForgotPassword: () => void;
@@ -14,7 +13,6 @@ type LoginFormProps = {
 
 export function LoginForm({
   onForgotPassword,
-  onSocialSignIn,
   onSubmit,
   onSwitchToSignup,
 }: LoginFormProps) {
@@ -28,14 +26,14 @@ export function LoginForm({
       <form className="auth-form" onSubmit={submitLogin}>
         <div className="auth-field">
           <label className="sr-only" htmlFor="login-identifier">
-            Mobile number or email address
+            Email address
           </label>
           <input
             id="login-identifier"
             name="identifier"
-            type="text"
+            type="email"
             autoComplete="username"
-            placeholder="Mobile number or email address"
+            placeholder="Email address"
             required
             autoFocus
           />
@@ -67,7 +65,6 @@ export function LoginForm({
         </p>
       </div>
 
-      <SocialSignIn onSelect={onSocialSignIn} />
     </>
   );
 }

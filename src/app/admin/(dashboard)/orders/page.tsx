@@ -1,0 +1,9 @@
+import Link from "next/link";
+import { requireAdmin, database } from "@/lib/admin/auth";
+const labels = { PENDING:"Pending confirmation", CONFIRMED:"Awaiting payment", PROCESSING:"Paid (manual)", COMPLETED:"Completed", CANCELLED:"Cancelled" };
+export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const admin=await requireAdmin(); if(!admin.permissions.includes("orders.manage")) return <p>You do not have permission to manage orders.</p>;
+  const page=Math.max(1,Math.min(100000,parseInt((await searchParams).page || "1") || 1));
+  const [orders,count]=await Promise.all([database().order.findMany({include:{notifications:true},orderBy:{placedAt:"desc"},skip:(page-1)*25,take:25}),database().order.count()]);
+  return <><div className="admin-heading"><div><h1>Orders</h1><p>Review requests and arrange payment directly with your customers.</p></div></div><section className="admin-panel"><div className="admin-table-scroll"><table className="admin-table"><thead><tr><th>Reference</th><th>Customer</th><th>Status</th><th>Items subtotal</th><th>Emails</th><th>Received</th></tr></thead><tbody>{orders.map((order)=><tr key={order.id}><td><Link href={`/admin/orders/${order.id}`}>{order.number}</Link></td><td>{order.email}</td><td>{labels[order.status]}</td><td>AUD {order.subtotal.toFixed(2)}</td><td>{order.notifications.filter((n)=>n.status==="SENT").length}/{order.notifications.length} sent</td><td>{order.placedAt.toLocaleString("en-AU",{timeZone:"Australia/Sydney"})}</td></tr>)}</tbody></table></div>{!orders.length && <div className="admin-empty"><h2>No order requests yet</h2><p>Customer requests will appear here after checkout.</p></div>}<div className="admin-pagination"><span>{count} orders</span><div>{page>1 && <Link href={`/admin/orders?page=${page-1}`}>Previous</Link>}{page*25<count && <Link href={`/admin/orders?page=${page+1}`}>Next</Link>}</div></div></section></>;
+}

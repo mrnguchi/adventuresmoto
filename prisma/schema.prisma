@@ -570,6 +570,8 @@ model BundleComponent {
 }
 
 model User {
+  customerSessions   CustomerSession[]
+  adminSessions      AdminSession[]
   id                 Int                  @id @default(autoincrement())
   publicId           String               @unique @default(cuid()) @db.VarChar(30)
   email              String               @unique @db.VarChar(191)
@@ -591,6 +593,46 @@ model User {
   inventoryMovements InventoryMovement[]
 
   @@map("users")
+}
+
+model CustomerSession {
+  tokenHash String @id @db.Char(64)
+  userId Int
+  expiresAt DateTime @db.DateTime(3)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("customer_sessions")
+}
+
+model CustomerAuthAttempt {
+  key String @id @db.Char(64)
+  attempts Int @default(0) @db.UnsignedInt
+  windowStart DateTime @default(now()) @db.DateTime(3)
+
+  @@map("customer_auth_attempts")
+}
+
+model AdminSession {
+  tokenHash String   @id @db.Char(64)
+  userId    Int
+  expiresAt DateTime @db.DateTime(3)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("admin_sessions")
+}
+
+model AdminLoginAttempt {
+  key         String   @id @db.Char(64)
+  attempts    Int      @default(0) @db.UnsignedInt
+  windowStart DateTime @default(now()) @db.DateTime(3)
+
+  @@map("admin_login_attempts")
 }
 
 model Role {
@@ -693,6 +735,7 @@ model Review {
 }
 
 model Cart {
+  version        Int        @default(0) @db.UnsignedInt
   id             Int        @id @default(autoincrement())
   publicId       String     @unique @default(cuid()) @db.VarChar(30)
   userId         Int?
@@ -722,6 +765,7 @@ model CartItem {
 }
 
 model Order {
+  notifications   OrderNotification[]
   id              Int         @id @default(autoincrement())
   publicId        String      @unique @default(cuid()) @db.VarChar(30)
   number          String      @unique @db.VarChar(50)
@@ -750,6 +794,21 @@ model Order {
   @@index([userId, placedAt])
   @@index([status, placedAt])
   @@map("orders")
+}
+
+model OrderNotification {
+  id Int @id @default(autoincrement())
+  orderId Int
+  audience String @db.VarChar(20)
+  status String @default("PENDING") @db.VarChar(20)
+  attempts Int @default(0)
+  lockedAt DateTime? @db.DateTime(3)
+  sentAt DateTime? @db.DateTime(3)
+  lastError String? @db.VarChar(255)
+  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  @@unique([orderId, audience])
+  @@index([status])
+  @@map("order_notifications")
 }
 
 model OrderItem {

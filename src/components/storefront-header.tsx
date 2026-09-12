@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAccount } from "@/components/account/account-provider";
+import { useCart } from "@/components/cart-provider";
 import {
   CartIcon,
   CloseIcon,
   GarageIcon,
-  HeartIcon,
   MenuIcon,
   SearchIcon,
   UserIcon,
@@ -52,18 +52,13 @@ function HeaderSearch({ mobile = false }: HeaderSearchProps) {
 }
 
 export function StorefrontHeader() {
+  const { cart } = useCart();
   const router = useRouter();
-  const { openAccount, requireAccount } = useAccount();
+  const { openAccount } = useAccount();
   const [menuOpen, setMenuOpen] = useState(false);
 
   function openGarage() {
     document.getElementById("my-garage")?.scrollIntoView();
-  }
-
-  function openProtectedPage(area: "cart" | "wishlist", href: string) {
-    if (requireAccount(area)) {
-      router.push(href);
-    }
   }
 
   return (
@@ -107,14 +102,6 @@ export function StorefrontHeader() {
             </button>
             <button
               type="button"
-              aria-label="Wishlist"
-              onClick={() => openProtectedPage("wishlist", "/wishlist")}
-            >
-              <HeartIcon />
-              <span>Wishlist</span>
-            </button>
-            <button
-              type="button"
               aria-label="My account"
               onClick={() => openAccount("login", "account")}
             >
@@ -124,12 +111,12 @@ export function StorefrontHeader() {
             <button
               className="cart-link"
               type="button"
-              aria-label="Cart, 0 items"
-              onClick={() => openProtectedPage("cart", "/cart")}
+              aria-label={`Cart, ${cart.count} items`}
+              onClick={() => router.push("/cart")}
             >
               <CartIcon />
               <span>Cart</span>
-              <b aria-hidden="true">0</b>
+              <b aria-hidden="true">{cart.count}</b>
             </button>
           </nav>
         </div>

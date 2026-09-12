@@ -3,7 +3,6 @@
 import type { FormEvent } from "react";
 
 import { PasswordField } from "@/components/account/password-field";
-import { SocialSignIn } from "@/components/account/social-sign-in";
 
 type SignupFormProps = {
   onSocialSignIn: (provider: string) => void;
@@ -12,7 +11,6 @@ type SignupFormProps = {
 };
 
 export function SignupForm({
-  onSocialSignIn,
   onSubmit,
   onSwitchToLogin,
 }: SignupFormProps) {
@@ -66,9 +64,9 @@ export function SignupForm({
           id="signup-password"
           name="password"
           label="Password"
-          placeholder="At least 8 characters"
+          placeholder="At least 12 characters"
           autoComplete="new-password"
-          minLength={8}
+          minLength={12}
         />
 
         <PasswordField
@@ -77,7 +75,7 @@ export function SignupForm({
           label="Confirm password"
           placeholder="Enter your password again"
           autoComplete="new-password"
-          minLength={8}
+          minLength={12}
         />
 
         <label className="auth-checkbox auth-terms">
@@ -93,7 +91,6 @@ export function SignupForm({
         </button>
       </form>
 
-      <SocialSignIn onSelect={onSocialSignIn} />
 
       <p className="auth-switch-copy">
         Already have an account?{" "}

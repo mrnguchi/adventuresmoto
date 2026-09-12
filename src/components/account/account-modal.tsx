@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { LoginForm } from "@/components/account/login-form";
-import { PasswordRecoveryForm } from "@/components/account/password-recovery-form";
 import { SignupForm } from "@/components/account/signup-form";
 import {
   protectedAreaCopy,
@@ -12,6 +11,8 @@ import {
   type ProtectedAccountArea,
 } from "@/components/account/account-types";
 import { CloseIcon } from "@/components/icons";
+import { accountRequest, useAccount } from "./account-provider";
+import { ProfileForm } from "./profile-form";
 
 type AccountModalProps = {
   area: ProtectedAccountArea;
@@ -34,6 +35,8 @@ export function AccountModal({
   view,
 }: AccountModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { user, setUser } = useAccount();
+  const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<FormNotice | null>(null);
   const areaCopy = protectedAreaCopy[area];
   const isLogin = view === "login";
@@ -73,6 +76,15 @@ export function AccountModal({
     setNotice({ message, tone: "info" });
   }
 
+  async function submitAccount(action: "login" | "signup", formData: FormData) {
+    if (busy) return;
+    setBusy(true); setNotice(null);
+    try {
+      const result = await accountRequest(action, { ...Object.fromEntries(formData), email: formData.get("email") ?? formData.get("identifier"), termsAccepted: formData.get("termsAccepted") === "on" });
+      setUser(result.user); setNotice(null);
+    } catch (error) { setNotice({ message: error instanceof Error ? error.message : "Unable to sign in.", tone: "error" }); }
+    finally { setBusy(false); }
+  }
   function submitSignup(formData: FormData) {
     if (formData.get("password") !== formData.get("passwordConfirmation")) {
       setNotice({
@@ -82,9 +94,7 @@ export function AccountModal({
       return;
     }
 
-    showIntegrationNotice(
-      "Account creation is ready for us to connect to the authentication service.",
-    );
+    void submitAccount("signup", formData);
   }
 
   return (
@@ -125,14 +135,14 @@ export function AccountModal({
         <section className="account-modal-content">
           <div className="account-modal-intro">
             <h1 id="account-modal-title">
-              {isLogin
+              {user ? `Hello, ${user.firstName}` : isLogin
                 ? "Log in"
                 : isSignup
                   ? "Create account"
                   : "Reset password"}
             </h1>
             <p id="account-modal-description">
-              {isLogin
+              {user ? "Manage your account details" : isLogin
                 ? area === "account"
                   ? "Please enter your details to log in"
                   : areaCopy.description
@@ -151,8 +161,8 @@ export function AccountModal({
             </p>
           ) : null}
 
-          <div className="account-form-view" key={view}>
-            {isLogin ? (
+          <fieldset className="account-form-view" key={user ? "profile" : view} disabled={busy} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
+            {user ? <ProfileForm /> : isLogin ? (
               <LoginForm
                 onForgotPassword={() => changeView("password-recovery")}
                 onSocialSignIn={(provider) =>
@@ -160,11 +170,7 @@ export function AccountModal({
                     `${provider} sign-in is ready for us to connect.`,
                   )
                 }
-                onSubmit={() =>
-                  showIntegrationNotice(
-                    "Login is ready for us to connect to the authentication service.",
-                  )
-                }
+                onSubmit={(data) => void submitAccount("login", data)}
                 onSwitchToSignup={() => changeView("signup")}
               />
             ) : isSignup ? (
@@ -178,11 +184,10 @@ export function AccountModal({
                 onSwitchToLogin={() => changeView("login")}
               />
             ) : (
-              <PasswordRecoveryForm
-                onBackToLogin={() => changeView("login")}
-              />
+              <div className="auth-login-links"><p>Password reset by email is not available yet. Please contact the store for help.</p><button type="button" onClick={() => changeView("login")}>Back to login</button></div>
             )}
-          </div>
+            {busy && <p role="status">Please wait…</p>}
+          </fieldset>
         </section>
       </div>
     </dialog>

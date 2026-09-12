@@ -51,6 +51,7 @@ export function PasswordField({
         autoComplete={autoComplete}
         placeholder={placeholder}
         minLength={minLength}
+        maxLength={128}
         required
         autoFocus={autoFocus}
       />

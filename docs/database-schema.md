@@ -230,6 +230,9 @@ already-applied migrations using `prisma migrate resolve --applied <name>` for:
 2. `20260910000000_store_products`
 3. `20260910010000_catalogue_and_commerce`
 4. `20260910020000_commerce_constraints`
+5. `20260911000000_admin_sessions`
+6. `20260912000000_customer_sessions`
+7. `20260912010000_manual_checkout`
 
 Do not mark a migration applied unless its SQL completed successfully. Subsequent
 changes use new migrations. If moving a full local database dump instead, include
@@ -238,10 +241,11 @@ behaviour runs in the client: raw SQL inserts must supply those required values.
 
 ## Compatibility and next implementation work
 
-This task establishes storage and migration design, not the admin/checkout APIs.
-Existing storefront adapters still read imageUrl, variant.size, variant.inStock
-and product-level prices. They remain intact to keep current pages compiling.
-Do not start entering new-schema-only data through an admin until adapters switch.
+The catalogue admin is implemented; see [admin-dashboard.md](admin-dashboard.md).
+Its transactions maintain legacy cover/size fields alongside normalized media,
+options and inventory. Storefront adapters read per-variant prices and actual
+available inventory, and use legacy inStock only when no balances exist.
+Checkout APIs and broader commerce workflows remain future work.
 
 Cutover sequence:
 

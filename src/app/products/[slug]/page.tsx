@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props) {
   const product = await getProductDetails((await params).slug);
-  return { title: product?.name ?? "Product not found" };
+  return { title: product?.seoTitle || product?.name || "Product not found", description: product?.seoDescription };
 }
 export default async function Page({ params }: Props) {
   const product = await getProductDetails((await params).slug);

@@ -9,11 +9,19 @@ mapping, relationships, inventory rules and Hostinger import instructions.
 `npm run db:export:schema` generates `prisma/exports/schema.sql` for an empty
 database. Existing databases should use migrations rather than that bootstrap file.
 
+The [admin dashboard](docs/admin-dashboard.md) is available at `/admin/login`.
+Customer registration, login and profile editing are available through the
+storefront Account button. See [Customer accounts](docs/customer-accounts.md).
+Cart and manual order requests are available at `/cart` and `/checkout`.
+See [Manual checkout](docs/manual-checkout.md) for SMTP setup and admin order handling.
+Use your created administrator account to manage products, categories, brands and
+stock. The guide covers publishing, media storage and verification.
+
 ## Requirements
 
 - Node.js 24
 - npm 11
-- Docker with Docker Compose
+- A local MariaDB server (native Windows installation or Docker with Docker Compose)
 
 ## Local setup
 
@@ -33,7 +41,9 @@ Install the application dependencies:
 npm install
 ```
 
-Start the local MariaDB database:
+If using Docker, start the local MariaDB database below. For a native Windows
+installation, keep the MariaDB service running and configure `DATABASE_URL` to
+match that installation instead.
 
 ```bash
 npm run db:up

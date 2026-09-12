@@ -27,6 +27,26 @@ export function findStoreCategory(path: string[]) {
   return storeCategories.find((category) => category.href === `/collections/${path.join("/")}`);
 }
 
+// Accept the singular labels used by admin-created categories as well as the
+// plural labels used by the curated homepage and navigation.
+export function categorySlugKey(slug: string) {
+  const aliases: Record<string, string> = {
+    "mens-jacket": "mens-jackets", "womens-jacket": "womens-jackets",
+    "mens-pant": "mens-pants", "womens-pant": "womens-pants",
+    "helmet": "helmets", "boot": "boots", "tyre": "tyres",
+  };
+  return aliases[slug] ?? slug;
+}
+
+export function categoryMatchesRoute(categorySlug: string, routeSlug: string) {
+  const key = categorySlugKey(categorySlug);
+  if (key === categorySlugKey(routeSlug)) return true;
+  // Curated top-level menus also include their known children when an admin
+  // created a child category without explicitly assigning its database parent.
+  return storeCategories.some((category) => categorySlugKey(category.slug) === key
+    && category.href.startsWith(`/collections/${routeSlug}/`));
+}
+
 export function hasWearableSizes(slug: string) {
   return slug === "riding-gear" || slug === "helmets" || slug === "boots"
     || /^(mens|womens)-/.test(slug)

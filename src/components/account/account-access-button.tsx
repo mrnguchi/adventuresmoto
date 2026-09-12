@@ -16,13 +16,13 @@ export function AccountAccessButton({
   children,
   className,
 }: AccountAccessButtonProps) {
-  const { requireAccount } = useAccount();
+  const { requireAccount, openAccount } = useAccount();
 
   return (
     <button
       className={className}
       type="button"
-      onClick={() => requireAccount(area)}
+      onClick={() => area === "account" ? openAccount() : requireAccount(area)}
     >
       {children}
     </button>

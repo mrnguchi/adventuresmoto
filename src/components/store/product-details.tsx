@@ -4,14 +4,24 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ProductDetails } from "@/lib/product-details";
+import { useCart } from "@/components/cart-provider";
 
 const money = (value: number) => new Intl.NumberFormat("en-AU", { style: "currency", currency: "AUD" }).format(value);
 
 export function ProductDetailView({ product, preview = false }: { product: ProductDetails; preview?: boolean }) {
+  const { change } = useCart();
+  const [adding, setAdding] = useState(false);
+  async function addToCart() {
+    if (!sku || adding) return;
+    setAdding(true); setNotice("");
+    try { await change("add", sku, quantity); setNotice("Added to your cart."); }
+    catch (error) { setNotice(error instanceof Error ? error.message : "Unable to add this item."); }
+    finally { setAdding(false); }
+  }
   const [imageIndex, setImageIndex] = useState(0);
   const [sku, setSku] = useState(product.variants.length === 1 ? product.variants[0].sku : "");
   const [quantity, setQuantity] = useState(1);
-  const [saved, setSaved] = useState(false);
+
   const [notice, setNotice] = useState("");
   const [expanded, setExpanded] = useState(false);
   const zoom = useRef<HTMLDialogElement>(null);
@@ -19,7 +29,9 @@ export function ProductDetailView({ product, preview = false }: { product: Produ
   const selected = product.variants.find((variant) => variant.sku === sku);
   const inStock = selected ? selected.inStock : product.variants.some((variant) => variant.inStock);
   const image = product.images[imageIndex];
-  const sale = product.compareAtPrice !== undefined && product.compareAtPrice > product.price;
+  const displayPrice = selected?.price ?? product.price;
+  const displayCompare = selected?.price !== undefined ? selected.compareAtPrice : product.compareAtPrice;
+  const sale = displayCompare !== undefined && displayCompare > displayPrice;
 
   return <div className="site-container product-page">
     <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/store">Store</Link>{product.category && <><span>/</span><Link href={product.category.href}>{product.category.name}</Link></>}<span>/</span><span aria-current="page">{product.name}</span></nav>
@@ -32,10 +44,10 @@ export function ProductDetailView({ product, preview = false }: { product: Produ
       </div>
       <aside className="product-purchase" aria-label="Product options">
         <div className="product-brand-mark">{product.brandLogo ? <Image src={product.brandLogo} alt={product.brand} width={230} height={90} unoptimized /> : <strong>{product.brand}</strong>}</div>
-        <div className="product-price-block"><p className="product-detail-price">{money(product.price)} {sale && <del>{money(product.compareAtPrice!)}</del>}</p><p className="product-currency">AUD</p><span className={`product-stock-badge ${inStock ? "available" : ""}`}>{inStock ? "In stock" : "Out of stock"}</span></div>
+        <div className="product-price-block"><p className="product-detail-price">{money(displayPrice)} {sale && <del>{money(displayCompare!)}</del>}</p><p className="product-currency">AUD</p><span className={`product-stock-badge ${inStock ? "available" : ""}`}>{inStock ? "In stock" : "Out of stock"}</span></div>
         <div className="product-service-copy"><div><strong>Returns & exchanges</strong><p>Need help with your order? Our team is here to help.</p></div><div><strong>Shipping</strong><p>$10 shipping Australia wide.</p></div></div>
         <fieldset className="product-options"><legend>{product.wearable ? "Select size" : "Select option"}</legend>{product.wearable && product.sizeChart && <button className="product-size-chart" onClick={() => chart.current?.showModal()}>Size chart ↗</button>}<div className="product-option-buttons">{product.variants.map((variant) => <button key={variant.sku} disabled={!variant.inStock} aria-pressed={sku === variant.sku} title={variant.inStock ? variant.label : `${variant.label} — out of stock`} onClick={() => { setSku(variant.sku); setNotice(""); }}>{variant.label}</button>)}</div>{product.variants.length === 0 && <p>Options are not available yet.</p>}</fieldset>
-        <div className="product-purchase-actions"><label className="product-quantity">Quantity <input type="number" min={1} max={99} value={quantity} onChange={(event) => setQuantity(Math.max(1, Math.min(99, Math.trunc(Number(event.target.value)) || 1)))} /></label><button className="product-cart-button" disabled={!selected?.inStock} onClick={() => setNotice("Online ordering is not available yet. Please call our team for help with this product.")}>{!inStock ? "Out of stock" : !selected ? "Select an option" : "Add to cart"}</button><button className="product-wishlist" aria-pressed={saved} onClick={() => { setSaved(!saved); setNotice(saved ? "Removed from your selection." : "Saved for this visit. Account wishlists will be available with online ordering."); }}>{saved ? "♥ Saved for this visit" : "♡ Add to wishlist"}</button><p className="product-action-notice" role="status">{notice}</p></div>
+        <div className="product-purchase-actions"><label className="product-quantity">Quantity <input type="number" min={1} max={99} value={quantity} onChange={(event) => setQuantity(Math.max(1, Math.min(99, Math.trunc(Number(event.target.value)) || 1)))} /></label><button className="product-cart-button" disabled={preview || adding || !selected?.inStock} onClick={addToCart}>{!inStock ? "Out of stock" : !selected ? "Select an option" : adding ? "Adding…" : "Add to cart"}</button><p className="product-action-notice" role="status">{notice}</p></div>
         <section className="product-stock-section"><h2>Stock availability</h2><div><strong>Online</strong><span className={`product-stock-badge ${inStock ? "available" : ""}`}>{selected ? selected.inStock ? "In stock" : "Out of stock" : "Select an option"}</span><p>{selected ? `SKU: ${selected.sku}` : "Choose an option above to check availability."}</p></div><p className="product-local-stock">For local store availability, <a href="tel:+61283485100">call our team ↗</a></p></section>
         {!!product.related?.length && <section className="product-related"><h2>Complete your kit</h2>{product.related.map((item) => <Link href={item.href} key={item.href}><Image src={item.image} alt={item.name} width={110} height={130} unoptimized /><span><strong>{item.name}</strong><b>{money(item.price)}</b></span></Link>)}</section>}
       </aside>

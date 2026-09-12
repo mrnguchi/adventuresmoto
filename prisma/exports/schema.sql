@@ -959,3 +959,66 @@ ALTER TABLE `refunds`
   ADD CONSTRAINT `refund_amount_positive` CHECK (`amount` > 0);
 ALTER TABLE `shipment_items`
   ADD CONSTRAINT `shipment_quantity_positive` CHECK (`quantity` > 0);
+
+
+-- Migration: 20260911000000_admin_sessions
+-- CreateTable
+CREATE TABLE `admin_sessions` (
+    `tokenHash` CHAR(64) NOT NULL,
+    `userId` INTEGER NOT NULL,
+    `expiresAt` DATETIME(3) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    INDEX `admin_sessions_userId_idx`(`userId`),
+    INDEX `admin_sessions_expiresAt_idx`(`expiresAt`),
+    PRIMARY KEY (`tokenHash`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `admin_login_attempts` (
+    `key` CHAR(64) NOT NULL,
+    `attempts` INTEGER UNSIGNED NOT NULL DEFAULT 0,
+    `windowStart` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`key`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `admin_sessions` ADD CONSTRAINT `admin_sessions_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+-- Migration: 20260912000000_customer_sessions
+CREATE TABLE `customer_sessions` (
+  `tokenHash` CHAR(64) NOT NULL,
+  `userId` INTEGER NOT NULL,
+  `expiresAt` DATETIME(3) NOT NULL,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (`tokenHash`),
+  INDEX `customer_sessions_userId_idx` (`userId`),
+  INDEX `customer_sessions_expiresAt_idx` (`expiresAt`),
+  CONSTRAINT `customer_sessions_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE `customer_auth_attempts` (
+  `key` CHAR(64) NOT NULL,
+  `attempts` INTEGER UNSIGNED NOT NULL DEFAULT 0,
+  `windowStart` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (`key`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
+-- Migration: 20260912010000_manual_checkout
+ALTER TABLE `carts` ADD COLUMN `version` INTEGER UNSIGNED NOT NULL DEFAULT 0;
+CREATE TABLE `order_notifications` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `orderId` INTEGER NOT NULL,
+  `audience` VARCHAR(20) NOT NULL,
+  `status` VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+  `attempts` INTEGER NOT NULL DEFAULT 0,
+  `lockedAt` DATETIME(3) NULL,
+  `sentAt` DATETIME(3) NULL,
+  `lastError` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `order_notifications_orderId_audience_key` (`orderId`, `audience`),
+  INDEX `order_notifications_status_idx` (`status`),
+  CONSTRAINT `order_notifications_orderId_fkey` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
