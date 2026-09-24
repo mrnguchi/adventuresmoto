@@ -1,3 +1,4 @@
+import { isAllowedOrigin } from "@/lib/request-origin";
 import { revalidatePath } from "next/cache";
 import { database, getAdmin, login, logout } from "@/lib/admin/auth";
 import { InputError, parseProduct } from "@/lib/admin/product-input";
@@ -7,7 +8,7 @@ export const runtime = "nodejs";
 export async function POST(request: Request, { params }: { params: Promise<{ path: string[] }> }) {
   const reply = (data: object, status = 200) => Response.json(data, { status, headers: { "Cache-Control": "no-store" } });
   // Cookies authenticate requests; require a same-origin JSON submission as CSRF protection.
-  if (request.headers.get("origin") !== new URL(request.url).origin || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
+  if (!isAllowedOrigin(request) || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
   const path = (await params).path.join("/");
   try {
     const raw = await request.text();

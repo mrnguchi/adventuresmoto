@@ -1,10 +1,11 @@
+import { isAllowedOrigin } from "@/lib/request-origin";
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { getAdmin } from "@/lib/admin/auth";
 
 export async function POST(request: Request) {
-  if (request.headers.get("origin") !== new URL(request.url).origin) return Response.json({ error: "Request not allowed." }, { status: 403 });
+  if (!isAllowedOrigin(request)) return Response.json({ error: "Request not allowed." }, { status: 403 });
   const admin = await getAdmin();
   if (!admin?.permissions.includes("catalogue.write")) return Response.json({ error: "Sign in with catalogue editing permission." }, { status: 401 });
   if (Number(request.headers.get("content-length") ?? 0) > 6 * 1024 * 1024) return Response.json({ error: "Maximum upload size is 5 MB." }, { status: 413 });

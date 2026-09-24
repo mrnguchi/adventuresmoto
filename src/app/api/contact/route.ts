@@ -1,10 +1,11 @@
+import { isAllowedOrigin } from "@/lib/request-origin";
 import nodemailer from "nodemailer";
 import { customerDatabase, digest } from "@/lib/customer-auth";
 import { smtpReady } from "@/lib/order-email";
 export const runtime = "nodejs";
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 export async function POST(request: Request) {
-  if (request.headers.get("origin") !== new URL(request.url).origin || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
+  if (!isAllowedOrigin(request) || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
   let body;
   try {
     const raw = await request.text();

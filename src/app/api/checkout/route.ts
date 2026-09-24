@@ -1,3 +1,4 @@
+import { isAllowedOrigin } from "@/lib/request-origin";
 import { randomBytes } from "node:crypto";
 import { customerDatabase, currentCustomer, digest } from "@/lib/customer-auth";
 import { ownedCart, cartView, cartInclude, lockCart, CartError } from "@/lib/cart";
@@ -5,7 +6,7 @@ import { deliverOrderEmails } from "@/lib/order-email";
 export const runtime = "nodejs";
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 export async function POST(request: Request) {
-  if (request.headers.get("origin") !== new URL(request.url).origin || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
+  if (!isAllowedOrigin(request) || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
   try {
     const raw = await request.text(); if (raw.length > 12000) return reply({ error: "Request too large." }, 413);
     const body = JSON.parse(raw);

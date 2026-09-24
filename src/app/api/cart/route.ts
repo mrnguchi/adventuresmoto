@@ -1,3 +1,4 @@
+import { isAllowedOrigin } from "@/lib/request-origin";
 import { customerDatabase } from "@/lib/customer-auth";
 import { ownedCart, cartView, cartInclude, availableStock, lockCart, CartError } from "@/lib/cart";
 export const runtime = "nodejs";
@@ -6,7 +7,7 @@ export async function GET() {
   try { return reply(cartView(await ownedCart())); } catch { return reply({ error: "Unable to load your cart. Please try again." }, 503); }
 }
 export async function POST(request: Request) {
-  if (request.headers.get("origin") !== new URL(request.url).origin || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
+  if (!isAllowedOrigin(request) || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
   try {
     const raw = await request.text(); if (raw.length > 4000) return reply({ error: "Request too large." }, 413);
     const body = JSON.parse(raw);

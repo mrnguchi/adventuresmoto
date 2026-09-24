@@ -1,3 +1,4 @@
+import { isAllowedOrigin } from "@/lib/request-origin";
 import { customerDatabase, currentCustomer, customerSignIn, customerSignOut, digest } from "@/lib/customer-auth";
 import { hashPassword, verifyPassword } from "@/lib/passwords.mjs";
 
@@ -9,7 +10,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ act
   catch { return reply({ error: "Account service is temporarily unavailable." }, 503); }
 }
 export async function POST(request: Request, { params }: { params: Promise<{ action: string }> }) {
-  if (request.headers.get("origin") !== new URL(request.url).origin || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
+  if (!isAllowedOrigin(request) || !request.headers.get("content-type")?.startsWith("application/json")) return reply({ error: "Request not allowed." }, 403);
   try {
     const raw = await request.text();
     if (raw.length > 8000) return reply({ error: "Request too large." }, 413);

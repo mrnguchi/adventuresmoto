@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { isAllowedOrigin } from '../src/lib/request-origin.ts';
+const request = (origin) => new Request('http://localhost:3000/api/account/login', { headers: origin ? { origin } : {} });
+process.env.APP_ORIGINS = 'https://adventuresmoto.com,https://www.adventuresmoto.com';
+assert.equal(isAllowedOrigin(request('https://adventuresmoto.com')), true);
+assert.equal(isAllowedOrigin(request('https://www.adventuresmoto.com')), true);
+for (const origin of [undefined, 'null', 'https://evil.example', 'https://adventuresmoto.com.evil.example', 'http://adventuresmoto.com']) assert.equal(isAllowedOrigin(request(origin)), false);
+delete process.env.APP_ORIGINS;
+assert.equal(isAllowedOrigin(request('http://localhost:3000')), true);
+assert.equal(isAllowedOrigin(request('https://evil.example')), false);
+console.log('Origin checks passed.');

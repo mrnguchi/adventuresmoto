@@ -1,9 +1,10 @@
+import { isAllowedOrigin } from "@/lib/request-origin";
 import { getAdmin, database } from "@/lib/admin/auth";
 import { deliverOrderEmails, smtpReady } from "@/lib/order-email";
 import { revalidatePath } from "next/cache";
 import type { OrderStatus } from "@/generated/prisma/client";
 export async function POST(request: Request) {
-  if(request.headers.get("origin")!==new URL(request.url).origin || !request.headers.get("content-type")?.startsWith("application/json")) return Response.json({error:"Request not allowed."},{status:403});
+  if(!isAllowedOrigin(request) || !request.headers.get("content-type")?.startsWith("application/json")) return Response.json({error:"Request not allowed."},{status:403});
   const admin=await getAdmin(); if(!admin?.permissions.includes("orders.manage")) return Response.json({error:"Order management permission required."},{status:403});
   try {
     const raw=await request.text(); if(raw.length>4000) return Response.json({error:"Request too large."},{status:413});
