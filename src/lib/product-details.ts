@@ -4,6 +4,7 @@ import { storeCategories, categorySlugKey } from "@/lib/store-categories";
 import { variantAvailable } from "@/lib/store";
 
 export type ProductDetails = {
+  fitments?: { id: number; make: string; model: string; year: number; note: string }[];
   slug: string; name: string; brand: string; brandLogo?: string;
   seoTitle?: string; seoDescription?: string;
   price: number; compareAtPrice?: number; images: { src: string; alt: string }[];
@@ -21,13 +22,14 @@ export const getProductDetails = cache(async (slug: string): Promise<ProductDeta
     where: { slug, status: "PUBLISHED", archivedAt: null },
     include: { brand: { include: { logoAsset: true } }, variants: { where: { isActive: true, archivedAt: null }, orderBy: { displayOrder: "asc" }, include: { inventory: { include: { location: true } } } },
       media: { orderBy: { displayOrder: "asc" }, include: { asset: true } }, sections: { orderBy: { displayOrder: "asc" } },
-      categories: { include: { category: true } } },
+      categories: { include: { category: true } }, fitments: { include: { motorcycle: { include: { model: { include: { make: true } } } } } } },
   });
   if (!product) return null;
   const categories = product.categories.filter(({ category }) => category.status === "PUBLISHED" && !category.archivedAt);
   const primary = categories.find((item) => item.category.id === product.primaryCategoryId)?.category ?? categories[0]?.category;
   const category = primary ? storeCategories.find((item) => categorySlugKey(item.slug) === categorySlugKey(primary.slug)) ?? { name: primary.name, href: `/collections/${primary.slug}` } : undefined;
   return {
+    fitments: product.fitments.map((f) => ({ id: f.motorcycleYearId, make: f.motorcycle.model.make.name, model: f.motorcycle.model.name, year: f.motorcycle.year, note: f.note ?? "" })),
     slug: product.slug, name: product.name, brand: product.brand?.name ?? "",
     seoTitle: product.seoTitle ?? undefined, seoDescription: product.seoDescription ?? undefined,
     brandLogo: product.brand?.logoAsset?.publicUrl ?? undefined,

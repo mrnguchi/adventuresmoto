@@ -1,5 +1,6 @@
 export type VariantInput = { id?: number; sku: string; size: string; price: string; quantity: number; stockVersion?: number; active: boolean };
 export type ProductInput = {
+  fitments?: { make: string; model: string; year: number; note: string }[];
   id?: number; version: number; name: string; slug: string; brandId: number | null; categoryId: number | null;
   status: "DRAFT" | "PUBLISHED"; wearable: boolean; price: string; compareAtPrice: string;
   description: string; highlights: string; images: string[]; videoUrl: string;
@@ -29,6 +30,18 @@ export function imageUrl(value: unknown) {
 export function parseProduct(raw: unknown): ProductInput {
   if (!raw || typeof raw !== "object") throw new InputError("Invalid product.");
   const r = raw as Record<string, unknown>;
+  let fitments: ProductInput["fitments"];
+  if (r.fitments !== undefined) {
+    if (!Array.isArray(r.fitments) || r.fitments.length > 500) throw new InputError("Use up to 500 bike fitments.");
+    fitments = r.fitments.map((value) => {
+      if (!value || typeof value !== "object") throw new InputError("Invalid bike fitment.");
+      const f = value as Record<string, unknown>;
+      const make = text(f.make, 100).replace(/\s+/g, " "), model = text(f.model, 191).replace(/\s+/g, " ");
+      if (!make || !model || !Number.isInteger(f.year) || Number(f.year) < 1900 || Number(f.year) > new Date().getFullYear() + 2) throw new InputError("Enter a bike make, exact model and valid year.");
+      return { make, model, year: Number(f.year), note: text(f.note, 500) };
+    });
+    if (new Set(fitments.map((f) => JSON.stringify([f.make.toLowerCase(), f.model.toLowerCase(), f.year]))).size !== fitments.length) throw new InputError("Remove duplicate bike fitments.");
+  }
   const name = text(r.name, 255), slug = text(r.slug, 191);
   if (!name || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new InputError("A name and a lowercase, hyphen-separated URL slug are required.");
   if (r.status !== "DRAFT" && r.status !== "PUBLISHED") throw new InputError("Invalid publication status.");
@@ -58,6 +71,6 @@ export function parseProduct(raw: unknown): ProductInput {
   const videoUrl = text(r.videoUrl, 2048);
   if (videoUrl && (!/^https:\/\//.test(videoUrl) || !/\.(mp4|webm)(\?.*)?$/i.test(videoUrl))) throw new InputError("Use a direct HTTPS MP4 or WebM video URL.");
   return { id: id(r.id, true) ?? undefined, version: Number(r.version), name, slug, categoryId, brandId, price, compareAtPrice,
-    status: r.status, wearable: r.wearable, images, variants, videoUrl,
+    status: r.status, wearable: r.wearable, images, variants, videoUrl, fitments,
     description: text(r.description, 30000), highlights: text(r.highlights, 10000), seoTitle: text(r.seoTitle, 255), seoDescription: text(r.seoDescription, 500) };
 }

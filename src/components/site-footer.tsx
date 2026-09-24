@@ -22,7 +22,6 @@ export function SiteFooter() {
               className="footer-benefit"
               href={benefit.href}
               key={benefit.title}
-              aria-label={"ariaLabel" in benefit ? benefit.ariaLabel : undefined}
             >
               <Image
                 src={benefit.image}
@@ -111,7 +110,6 @@ export function SiteFooter() {
           <div className="footer-legal">
             <p>© 2026 Adventures Moto. All rights reserved.</p>
             <nav aria-label="Legal">
-              <Link href="/privacy-policy">Privacy</Link>
               <Link href="/terms">Terms</Link>
             </nav>
           </div>

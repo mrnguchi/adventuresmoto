@@ -81,8 +81,7 @@ export function SignupForm({
         <label className="auth-checkbox auth-terms">
           <input name="termsAccepted" type="checkbox" required />
           <span>
-            I agree to the <a href="/terms">terms</a> and{" "}
-            <a href="/privacy-policy">privacy policy</a>.
+            I agree to the <a href="/terms">terms</a>.
           </span>
         </label>
 

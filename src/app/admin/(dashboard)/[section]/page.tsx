@@ -5,6 +5,7 @@ import { TaxonomyForm } from "@/components/admin/controls";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ section: string }>; searchParams: Promise<{ page?: string }> }) {
   await requireAdmin(); const { section } = await params; const query = await searchParams;
+  if (section === "brands") notFound();
   const page = Math.max(1, Math.min(100000, Number.parseInt(query.page ?? "1") || 1)); const db = database();
   if (section === "categories" || section === "brands") {
     const categories = await db.category.findMany({ where: { archivedAt: null }, include: { parent: true, _count: { select: { products: true } } }, orderBy: { name: "asc" } });

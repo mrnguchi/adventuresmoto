@@ -1,5 +1,4 @@
 export const utilityLinks = [
-  { label: "Blog", href: "/blog" },
   { label: "Home", href: "/" },
   { label: "Contact", href: "/contact" },
 ];
@@ -25,11 +24,6 @@ type ProductCategory = {
 };
 
 export const productCategories: ProductCategory[] = [
-  {
-    label: "Brands",
-    items: ["Alpinestars", "Barkbusters", "Klim", "Loboo", "Mosko Moto"],
-    featured: true,
-  },
   {
     label: "Riding gear",
     sections: [

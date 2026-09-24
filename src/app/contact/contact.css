@@ -1,0 +1,27 @@
+.contact-page { padding-bottom: 72px; }
+.contact-heading { padding: 36px 0; max-width: 740px; }
+.contact-heading h1 { font-size: clamp(34px, 5vw, 56px); line-height: 1.1; margin: 0 0 18px; }
+.contact-heading p, .contact-form-panel > p { color: #62615b; line-height: 1.7; }
+.contact-layout { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(0, 1.7fr); gap: 40px; align-items: start; }
+.contact-information { padding: 30px; background: #f6f5f0; border-radius: 8px; }
+.contact-information section + section { margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--line); }
+.contact-layout h2 { font-size: 23px; margin: 0 0 16px; }
+.contact-information a { display: block; padding: 6px 0; overflow-wrap: anywhere; text-decoration: underline; text-underline-offset: 3px; }
+.contact-information address { font-style: normal; line-height: 1.8; }
+.contact-information dl { margin: 0; }
+.contact-information dl div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 8px 0; }
+.contact-information dd { margin: 0; }
+.contact-note { font-size: 13px; line-height: 1.6; color: #62615b; margin-top: 16px; }
+.contact-form-panel { padding: 30px; border: 1px solid var(--line); border-radius: 8px; background: white; }
+.contact-form-panel form { margin-top: 24px; }
+.contact-form-panel label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 20px; }
+.contact-form-panel input, .contact-form-panel select, .contact-form-panel textarea { display: block; width: 100%; min-width: 0; margin-top: 8px; padding: 13px; border: 1px solid #ccc9bf; border-radius: 5px; background: white; font: inherit; font-weight: 400; min-height: 48px; }
+.contact-form-panel textarea { resize: vertical; }
+.contact-field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.contact-submit, .contact-success button { border: 0; border-radius: 5px; background: var(--orange); color: white; font: inherit; font-weight: 700; padding: 15px 28px; min-height: 48px; }
+.contact-submit:disabled { opacity: .65; cursor: wait; }
+.contact-trap { display: none; }
+.contact-error { color: #a32222; line-height: 1.6; }
+.contact-success { padding: 24px 0; line-height: 1.7; }
+.contact-page :is(input, select, textarea, button, a):focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+@media (max-width: 800px) { .contact-layout { grid-template-columns: 1fr; gap: 24px; } .contact-form-panel, .contact-information { padding: 24px 20px; } .contact-field-pair { grid-template-columns: 1fr; gap: 0; } .contact-submit { width: 100%; } .contact-heading { padding: 28px 0; } }

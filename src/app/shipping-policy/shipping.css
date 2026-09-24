@@ -1,0 +1,17 @@
+.shipping-policy-page { padding-bottom: 72px; }
+.shipping-policy-heading { padding: 36px 0; }
+.shipping-policy-heading h1 { font-size: clamp(34px, 5vw, 56px); margin: 0 0 16px; line-height: 1.15; }
+.shipping-policy-heading p { color: #62615b; }
+.shipping-policy-layout { display: grid; grid-template-columns: 260px minmax(0, 800px); gap: 56px; align-items: start; }
+.shipping-policy-contents { background: #f6f5f0; border-radius: 6px; padding: 24px; }
+.shipping-policy-contents h2 { font-size: 18px; margin: 0 0 12px; }
+.shipping-policy-contents a { display: block; padding: 12px 0; line-height: 1.4; border-bottom: 1px solid var(--line); }
+.shipping-policy-contents a:last-child { border-bottom: 0; }
+.shipping-policy-copy section { padding: 28px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 32px; }
+.shipping-policy-copy h2 { font-size: 24px; margin: 0 0 14px; }
+.shipping-policy-copy p { line-height: 1.8; margin: 0; color: #53534d; }
+.shipping-policy-notice { padding: 24px; background: #fff8e8; border-left: 3px solid var(--orange); }
+.shipping-policy-notice strong { display: block; margin-bottom: 10px; }
+.shipping-policy-copy a { text-decoration: underline; text-underline-offset: 3px; }
+.shipping-policy-page a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+@media (max-width: 800px) { .shipping-policy-layout { grid-template-columns: 1fr; gap: 24px; } .shipping-policy-heading { padding-block: 28px; } .shipping-policy-contents { padding: 20px; } }

@@ -25,6 +25,15 @@ export async function saveProduct(input: ProductInput, actorId: number) {
     } else {
       productId = (await tx.product.create({ data })).id;
     }
+    if (input.fitments !== undefined) {
+      await tx.productFitment.deleteMany({ where: { productId } });
+      for (const f of input.fitments) {
+        const make = await tx.motorcycleMake.upsert({ where: { name: f.make }, create: { name: f.make }, update: {} });
+        const model = await tx.motorcycleModel.upsert({ where: { makeId_name: { makeId: make.id, name: f.model } }, create: { makeId: make.id, name: f.model }, update: {} });
+        const bike = await tx.motorcycleYear.upsert({ where: { modelId_year: { modelId: model.id, year: f.year } }, create: { modelId: model.id, year: f.year }, update: {} });
+        await tx.productFitment.create({ data: { productId, motorcycleYearId: bike.id, note: f.note || null } });
+      }
+    }
     // Preserve additional merchandising categories; the selected one is primary.
     if (input.categoryId) await tx.productCategory.upsert({ where: { productId_categoryId: { productId, categoryId: input.categoryId } }, create: { productId, categoryId: input.categoryId }, update: {} });
     await tx.productMedia.deleteMany({ where: { productId } });

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { heroSlides } from "@/data/hero-slides";
 import { HeroSlideImage } from "./hero-slide-image";
@@ -60,16 +59,13 @@ export function HeroSlider() {
               aria-live={playing ? "off" : "polite"}
             >
               {heroSlides.map((slide, index) => (
-                <Link
+                <div
                   className="slider-slide"
-                  href={slide.href}
                   key={slide.id}
-                  aria-label={slide.linkLabel}
                   aria-hidden={index !== activeSlide}
-                  tabIndex={index === activeSlide ? 0 : -1}
                 >
                   <HeroSlideImage slide={slide} priority={index === 0} />
-                </Link>
+                </div>
               ))}
             </div>
           </div>

@@ -10,11 +10,11 @@ export function variantAvailable(variant: { inStock: boolean; isActive: boolean;
   return variant.isActive && !variant.archivedAt && (variant.inventory.length ? variant.inventory.some((i) => i.location.isActive && i.location.fulfillsOnline && i.onHand - i.reserved - i.safetyStock > 0) : variant.inStock);
 }
 
-export async function getStoreProducts(slug: string): Promise<{ products: StoreProduct[]; unavailable: boolean }> {
+export async function getStoreProducts(slug: string, query = "", motorcycleYearId?: number): Promise<{ products: StoreProduct[]; unavailable: boolean }> {
   const database = getDatabase();
   if (!database) return { products: [], unavailable: true };
   // Include published descendants so parent categories show their entire range.
-  const categories = await database.category.findMany({
+  const categories = slug === "all" || slug === "sale" ? [] : await database.category.findMany({
     where: { status: "PUBLISHED", archivedAt: null }, select: { id: true, parentId: true, slug: true },
   });
   const ids = new Set(categories.filter((category) => categoryMatchesRoute(category.slug, slug)).map((category) => category.id));
@@ -24,7 +24,15 @@ export async function getStoreProducts(slug: string): Promise<{ products: StoreP
     for (const category of categories) if (category.parentId && ids.has(category.parentId)) ids.add(category.id);
   }
   const products = await database.product.findMany({
-    where: { status: "PUBLISHED", archivedAt: null, ...(slug === "all" || slug === "sale" ? {} : { OR: [{ primaryCategoryId: { in: [...ids] } }, { categories: { some: { categoryId: { in: [...ids] } } } }] }) },
+    where: { status: "PUBLISHED", archivedAt: null,
+      ...(motorcycleYearId ? { fitments: { some: { motorcycleYearId } } } : {}),
+      AND: query.trim().split(/\s+/).filter(Boolean).slice(0, 20).map((term) => ({ OR: [
+        { name: { contains: term } },
+        { shortDescription: { contains: term } },
+        { brand: { name: { contains: term } } },
+        { variants: { some: { isActive: true, archivedAt: null, sku: { contains: term } } } },
+      ] })),
+      ...(slug === "all" || slug === "sale" ? {} : { OR: [{ primaryCategoryId: { in: [...ids] } }, { categories: { some: { categoryId: { in: [...ids] } } } }] }) },
     include: { brand: true, variants: { where: { isActive: true, archivedAt: null }, include: { inventory: { include: { location: true } } } } },
     orderBy: [{ displayOrder: "asc" }, { id: "desc" }],
   });

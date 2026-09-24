@@ -79,3 +79,9 @@
 .product-page :is(button,a,input,summary):focus-visible { outline:2px solid var(--orange); outline-offset:4px; }
 @media(max-width:950px) { .product-detail-grid { gap:28px; grid-template-columns:minmax(0,1.1fr) minmax(280px,1fr); } .product-main-image { min-height:300px; padding:12px; } }
 @media(max-width:700px) { .product-detail-grid { display:flex; flex-direction:column; gap:26px; } .product-gallery,.product-purchase,.product-information { width:100%; } .product-main-image { aspect-ratio:1; } .product-brand-mark { justify-content:flex-start; min-height:40px; padding-bottom:14px; } .product-information { margin-top:0; } .product-title h1 { font-size:28px; } .product-page .breadcrumbs { padding-bottom:22px; font-size:10px; } }
+.bike-fitment-group { border-bottom: 1px solid #e5e3dd; padding: 12px 0; }
+.bike-fitment-group > summary { min-height: 44px; cursor: pointer; font-size: 16px; font-weight: 700; }
+.bike-fitment-group > summary span { color: var(--orange-dark); }
+.bike-fitment-group li { padding: 7px 0; }
+.bike-fitment-group a { color: var(--orange-dark); text-decoration: underline; overflow-wrap: anywhere; }
+.bike-fitment-group li p { margin: 4px 0; font-size: 14px; }

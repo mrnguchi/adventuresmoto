@@ -1,4 +1,5 @@
 "use client";
+import { BikeFitment } from "./bike-fitment";
 
 import { useRef, useState } from "react";
 import Image from "next/image";
@@ -36,14 +37,14 @@ export function ProductDetailView({ product, preview = false }: { product: Produ
   return <div className="site-container product-page">
     <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/store">Store</Link>{product.category && <><span>/</span><Link href={product.category.href}>{product.category.name}</Link></>}<span>/</span><span aria-current="page">{product.name}</span></nav>
     {preview && <p className="product-preview-note">Design preview · Sample product information for reviewing this page.</p>}
-    <header className="product-title"><p>{product.brand || "Gear for the ride ahead"}</p><h1>{product.name}</h1><div className="product-sku">{selected ? <>SKU: {selected.sku} <button aria-label="Copy SKU" onClick={async () => { try { await navigator.clipboard.writeText(selected.sku); setNotice("SKU copied."); } catch { setNotice(`SKU: ${selected.sku}`); } }}>Copy</button></> : "Select an option to view its SKU"}</div></header>
+    <header className="product-title"><h1>{product.name}</h1><div className="product-sku">{selected ? <>SKU: {selected.sku} <button aria-label="Copy SKU" onClick={async () => { try { await navigator.clipboard.writeText(selected.sku); setNotice("SKU copied."); } catch { setNotice(`SKU: ${selected.sku}`); } }}>Copy</button></> : "Select an option to view its SKU"}</div></header>
     <div className="product-detail-grid">
       <div className="product-gallery">
         <button className="product-main-image" onClick={() => zoom.current?.showModal()} disabled={!image} aria-label="Enlarge product image">{image ? <Image src={image.src} alt={image.alt} width={900} height={900} unoptimized priority /> : <span>Product image coming soon</span>}<span className="product-zoom-label">{image ? "＋ View larger" : ""}</span></button>
         {product.images.length > 1 && <div className="product-thumbnails">{product.images.map((item, index) => <button key={`${item.src}-${index}`} aria-label={`View image ${index + 1}: ${item.alt}`} aria-pressed={imageIndex === index} onClick={() => setImageIndex(index)}><Image src={item.src} alt={item.alt} width={180} height={180} unoptimized /></button>)}</div>}
       </div>
       <aside className="product-purchase" aria-label="Product options">
-        <div className="product-brand-mark">{product.brandLogo ? <Image src={product.brandLogo} alt={product.brand} width={230} height={90} unoptimized /> : <strong>{product.brand}</strong>}</div>
+        
         <div className="product-price-block"><p className="product-detail-price">{money(displayPrice)} {sale && <del>{money(displayCompare!)}</del>}</p><p className="product-currency">AUD</p><span className={`product-stock-badge ${inStock ? "available" : ""}`}>{inStock ? "In stock" : "Out of stock"}</span></div>
         <div className="product-service-copy"><div><strong>Returns & exchanges</strong><p>Need help with your order? Our team is here to help.</p></div><div><strong>Shipping</strong><p>$10 shipping Australia wide.</p></div></div>
         <fieldset className="product-options"><legend>{product.wearable ? "Select size" : "Select option"}</legend>{product.wearable && product.sizeChart && <button className="product-size-chart" onClick={() => chart.current?.showModal()}>Size chart ↗</button>}<div className="product-option-buttons">{product.variants.map((variant) => <button key={variant.sku} disabled={!variant.inStock} aria-pressed={sku === variant.sku} title={variant.inStock ? variant.label : `${variant.label} — out of stock`} onClick={() => { setSku(variant.sku); setNotice(""); }}>{variant.label}</button>)}</div>{product.variants.length === 0 && <p>Options are not available yet.</p>}</fieldset>
@@ -53,6 +54,7 @@ export function ProductDetailView({ product, preview = false }: { product: Produ
       </aside>
       <div className="product-information">
         <details className="product-accordion" open><summary>Description</summary><div className={!expanded && product.features.length > 0 ? "product-description-collapsed" : ""}>{product.description.length ? product.description.map((paragraph) => <p key={paragraph}>{paragraph}</p>) : <p>More product information will be available soon. Contact our team for specifications and advice.</p>}{product.features.map((section) => <section key={section.title}><h3>{section.title}</h3><ul>{section.items.map((item) => <li key={item}>{item}</li>)}</ul></section>)}</div>{product.features.length > 0 && <button className="product-show-more" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>{expanded ? "Show less −" : "Show more +"}</button>}</details>
+        {(!product.wearable || !!product.fitments?.length) && <BikeFitment fitments={product.fitments} />}
         <details className="product-accordion" open={Boolean(product.videoUrl)}><summary>Video</summary>{product.videoUrl ? <video className="product-video" controls preload="none" src={product.videoUrl}>Your browser does not support video.</video> : <p>No product video is available yet.</p>}</details>
         <details className="product-accordion"><summary>Reviews <span>No reviews yet</span></summary><p>Customer reviews will be available here.</p></details>
         <details className="product-accordion" open><summary>Delivery & returns</summary><h3>Shipping</h3><p>$10 shipping Australia wide. Contact our team for delivery estimates for your location.</p><h3>Returns</h3><p>For help with sizing, exchanges or returning an item, speak with our team before sending your item back.</p><a className="product-contact-link" href="tel:+61283485100">Call (02) 8348 5100 ↗</a></details>

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "admin:create": "node scripts/create-admin.mjs",
-    "dev": "next dev --webpack",
+    "dev": "node --use-system-ca node_modules/next/dist/bin/next dev --webpack",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",

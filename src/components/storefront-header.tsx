@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAccount } from "@/components/account/account-provider";
 import { useCart } from "@/components/cart-provider";
 import {
@@ -56,9 +56,10 @@ export function StorefrontHeader() {
   const router = useRouter();
   const { openAccount } = useAccount();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   function openGarage() {
-    document.getElementById("my-garage")?.scrollIntoView();
+    router.push("/garage");
   }
 
   return (
@@ -68,6 +69,7 @@ export function StorefrontHeader() {
       <div className="main-header">
         <div className="site-container main-header-inner">
           <button
+            ref={menuButton}
             className="mobile-menu-button icon-button"
             type="button"
             aria-label={menuOpen ? "Close product menu" : "Open product menu"}
@@ -101,9 +103,13 @@ export function StorefrontHeader() {
               <span>My Garage</span>
             </button>
             <button
+              className="account-action"
               type="button"
               aria-label="My account"
-              onClick={() => openAccount("login", "account")}
+              onClick={() => {
+                setMenuOpen(false);
+                openAccount("login", "account");
+              }}
             >
               <UserIcon />
               <span>Account</span>
@@ -126,7 +132,14 @@ export function StorefrontHeader() {
         </div>
       </div>
 
-      <ProductNavigation open={menuOpen} />
+      <ProductNavigation
+        open={menuOpen}
+        onNavigate={() => setMenuOpen(false)}
+        onClose={() => {
+          setMenuOpen(false);
+          menuButton.current?.focus();
+        }}
+      />
       <ShippingStrip />
     </header>
   );
